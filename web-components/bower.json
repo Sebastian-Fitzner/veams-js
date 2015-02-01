@@ -1,0 +1,12 @@
+{
+	"name": "App",
+	"version": "0.1.0",
+	"dependencies": {
+		"requirejs": "*",
+		"backbone": "*",
+		"requirejs-text": "~2.0.12",
+		"almond": "~0.3.0",
+		"jquery-touchswipe": "~1.6.6",
+		"respimage": "~1.1.6"
+	}
+}
