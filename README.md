@@ -4,8 +4,8 @@ PG-JS Starter Kit contains a simple setup for a general JavaScript workflow.
 
 It consists of two basic approaches:
 
-1. [Web Components](html-components/js/README.md) or
-2. [HTML Components](web-components/js/README.md)
+1. [Web Components](web-components/js/README.md) or
+2. [HTML Components](html-components/js/README.md)
 
 Both approaches are realised with:
 
