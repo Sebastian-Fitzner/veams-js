@@ -14,8 +14,6 @@ require.config({
 		'ui.overlay-init': 'modules/overlay/init',
 		'ui.carousel': 'modules/carousel/ui-carousel',
 		'ui.carousel-init': 'modules/carousel/init',
-		'ui.tabtree': 'modules/tabtree/ui-tabtree',
-		'ui.tabtree-init': 'modules/tabtree/init',
 		'equalRowHeight': 'modules/equal-row-height/equal-row-heights'
 	},
 	shim: {

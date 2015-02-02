@@ -22,8 +22,6 @@
 	}
 
 	// @borrows object Backbone.Events
-	// The top-level namespace. All public ui classes and modules will
-	// be attached to FHKL.ui.
 	var App = root.App = {
 		Vent: _.extend({}, Backbone.Events),
 		ui: {}
