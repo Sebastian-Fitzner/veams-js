@@ -2,6 +2,7 @@
 	"name": "App",
 	"version": "0.1.0",
 	"dependencies": {
+		"document-register-element": "~0.2.2",
 		"requirejs": "*",
 		"backbone": "*",
 		"requirejs-text": "~2.0.12",
