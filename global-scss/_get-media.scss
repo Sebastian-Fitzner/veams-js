@@ -1,0 +1,28 @@
+/**
+ * Media Query Indicator for JS
+ * A description.
+ */
+
+head {
+	font-family: desktop;
+
+	//Media Queries
+	@include media($bp-desktop) {
+		font-family: desktop-small;
+	}
+	@include media($bp-tablet-l) {
+		font-family: tablet-large;
+	}
+	@include media($bp-tablet-p) {
+		font-family: tablet-small;
+	}
+	@include media($bp-mobile-l) {
+		font-family: mobile-large;
+	}
+	@include media($bp-mobile-p) {
+		font-family: mobile-medium;
+	}
+	@include media($bp-mobile-s) {
+		font-family: mobile-small;
+	}
+}

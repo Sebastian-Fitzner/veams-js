@@ -14,9 +14,23 @@ require(['config'], function () {
 	], function (Backbone, $, Helpers, App, EqualRows, Button, Carousel, Toggle, Sticky) {
 		"use strict";
 
+		var $head = $('head');
+		var currentMedia = $head.css('font-family');
+
+		App.currentMedia = currentMedia;
+
 		// Trigger global resize event
 		window.onresize = function () {
+			App.currentMedia = $head.css('font-family');
+
 			App.Vent.trigger('resize');
+
+			if (currentMedia !== App.currentMedia) {
+				App.Vent.trigger({
+					type: 'mediachange',
+					currentMedia: currentMedia
+				});
+			}
 		};
 
 		/**
