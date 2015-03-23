@@ -1,0 +1,147 @@
+/* ===================================================
+CAROUSEL MODULE
+=================================================== */
+
+/* ---------------------------------------------------
+ui-carousel
+	- check :unresolved
+--------------------------------------------------- */
+
+ui-carousel {
+	opacity: 1;
+
+	&:unresolved {
+		opacity: 0;
+	}
+}
+
+/* ---------------------------------------------------
+Global Styles
+	- is used for all carousels
+--------------------------------------------------- */
+
+[data-css="m-carousel"] {
+	position: relative;
+	float: left;
+	width: 100%;
+	height: 100%;
+	perspective: 1200px;
+	z-index: 1;
+
+	&.js-hide-pagination {
+		.carousel__pagination {
+			display: none;
+		}
+	}
+
+	&:hover {
+		.carousel__pagination-next,
+		.carousel__pagination-prev {
+			opacity: 1;
+		}
+	}
+
+	.carousel__list {
+		overflow: hidden;
+		margin: 0;
+		list-style: none;
+	}
+
+	&.js-not-responsive .carousel__list-item, .carousel__list-group {
+		@include prefix(transform, translate3d(0, 0, 0));
+		@include prefix(backface-visibility, hidden);
+		@include prefix(transform-style, preserve-3d);
+
+		position: absolute;
+		top: 0;
+		left: 0;
+		visibility: hidden;
+		overflow: hidden;
+		max-width: 100%;
+		list-style: none;
+
+		&.is-current,
+		&.is-active {
+			visibility: visible;
+		}
+
+		&.carousel__slides-visible {
+			@include slide-scaleUpCenter();
+		}
+
+		&.carousel__slide-left-in-fx,
+		&.carousel__slide-right-in-fx {
+			z-index: 1;
+		}
+
+		&.carousel__slide-left-out-fx,
+		&.carousel__slide-right-out-fx {
+			z-index: 0;
+		}
+
+		&.carousel__slide-left-in-fx {
+			@include slide-moveFromRightFade();
+		}
+		&.carousel__slide-left-out-fx {
+			@include slide-moveToLeftFade();
+		}
+		&.carousel__slide-right-in-fx {
+			@include slide-moveFromLeftFade();
+		}
+		&.carousel__slide-right-out-fx {
+			@include slide-moveToRightFade();
+		}
+	}
+
+	.carousel__pagination-list {
+		position: relative;
+		width: auto;
+		margin: 0 auto;
+	}
+}
+
+/* ---------------------------------------------------
+Carousel Modifier
+--------------------------------------------------- */
+.m-carousel {
+
+	.carousel__list {
+	}
+
+	&.js-not-responsive .carousel__list-item, .carousel__list-group {
+	}
+
+	.carousel__pagination-wrapper {
+	}
+
+	.carousel__pagination-item {
+
+		&.is-active {
+		}
+	}
+
+	.carousel__pagination-next,
+	.carousel__pagination-prev {
+
+		&:hover,
+		&:focus {
+			outline: 0;
+		}
+	}
+
+	.carousel__pagination-next {
+
+		.carousel__pagination-icon {
+			&::before {
+			}
+		}
+	}
+
+	.carousel__pagination-prev {
+
+		.carousel__pagination-icon {
+			&::before {
+			}
+		}
+	}
+}

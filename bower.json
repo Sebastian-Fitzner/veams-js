@@ -1,6 +1,6 @@
 {
 	"name": "pg-js",
-	"version": "0.1.7",
+	"version": "0.1.8",
 	"ignore": [
 		"demo",
 		".gitignore",

@@ -1,0 +1,21 @@
+/* ===================================================
+STICKY MODULE
+=================================================== */
+
+/* ---------------------------------------------------
+Global Styles
+--------------------------------------------------- */
+
+.is-sticky {
+	@include prefix(transform, translate(-50%, 0px));
+	@include prefix(backface-visibility, hidden);
+
+	position: fixed;
+	width: 100%;
+	top: 0;
+	z-index: 100;
+	border-top: 0;
+	float: none;
+	left: 50%;
+	perspective: 0;
+}

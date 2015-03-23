@@ -4,8 +4,8 @@ PG-JS Starter Kit contains a simple setup for a general JavaScript workflow.
 
 It consists of two basic approaches:
 
-1. [Web Components](web-components/js/README.md) or
-2. [HTML Components](html-components/js/README.md)
+1. [Web Components](_setup-web-components/README.md) or
+2. [HTML Components](_setup-html-components/README.md)
 
 Both approaches are realised with:
 
@@ -40,7 +40,6 @@ Just copy the files you need into the js folder in your project. The following f
 
 - `app.js`
 - `main.js`
-- `vendor/document-register-element.js`
 - `utils/helpers.js`
 - `utils/mixins/imageLoader.js`
 
@@ -56,6 +55,16 @@ All files in the `modules` folder are optional and work in progress. Keep that i
 
 All files in the `modules` folder are optional and work in progress. Keep that in mind. 
 
+### Modules
+
+Each module has an own `init` file which is only necessary when you use the `web components` approach. 
+
+Furthermore there are `scss` and `hbs` files for each module, which you can use in your project. 
+
+#### Handlebars Files
+
+Each `hbs` template contains `web components` instead of normal html tags. 
+When you want to use the `html components` approach, just change the `ui`-tag into something you would prefer. Then you need to add a new data attribute (`data-js-module="module-name"`). That's it ...  
 
 ### Demo 
 
