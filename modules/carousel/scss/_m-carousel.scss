@@ -29,14 +29,15 @@ Global Styles
 	z-index: 1;
 
 	&.js-hide-pagination {
-		.carousel__pagination {
+		.carousel__pagination,
+		.carousel__navigation {
 			display: none;
 		}
 	}
 
 	&:hover {
-		.carousel__pagination-next,
-		.carousel__pagination-prev {
+		.carousel__navigation-next,
+		.carousel__navigation-prev {
 			opacity: 1;
 		}
 	}
@@ -111,6 +112,16 @@ Carousel Modifier
 	&.js-not-responsive .carousel__list-item, .carousel__list-group {
 	}
 
+	/*
+	Sub Elements: Navigation and Pagination
+	----------------------- */
+	.carousel__controls {
+
+	}
+
+	/*
+	Sub Element: Pagination
+	----------------------- */
 	.carousel__pagination-wrapper {
 	}
 
@@ -120,28 +131,52 @@ Carousel Modifier
 		}
 	}
 
-	.carousel__pagination-next,
-	.carousel__pagination-prev {
+	/*
+	Sub Element: Navigation
+	----------------------- */
+	.carousel__navigation {
+	}
+
+	.carousel__navigation-next,
+	.carousel__navigation-prev {
+		@extend %reset-btn;
+		@extend %hide-text;
 
 		&:hover,
 		&:focus {
+			cursor: pointer;
 			outline: 0;
 		}
 	}
 
-	.carousel__pagination-next {
+	.carousel__navigation-icon {
+		&::before {
+		}
 
-		.carousel__pagination-icon {
-			&::before {
-			}
+		&:hover,
+		&:focus {
 		}
 	}
 
-	.carousel__pagination-prev {
-
-		.carousel__pagination-icon {
-			&::before {
+	.carousel__navigation-next {
+		&:hover,
+		&:focus {
+			.carousel__navigation-icon {
+				&::before {
+				}
 			}
 		}
+
+	}
+
+	.carousel__navigation-prev {
+		&:hover,
+		&:focus {
+			.carousel__navigation-icon {
+				&::before {
+				}
+			}
+		}
+
 	}
 }

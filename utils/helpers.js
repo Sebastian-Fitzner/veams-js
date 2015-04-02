@@ -4,7 +4,7 @@
  *
  * @author Sebastian Fitzner
  */
-define('helpers', ['App', 'backbone'], function (App, Backbone) {
+define('helpers', ['App', 'backbone'], function(App, Backbone) {
 
 	"use strict";
 
@@ -17,7 +17,7 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 * Merge views method functions.
 	 * @param {object} from - Mixin object which will be merged via _.defaults with the methods of our view
 	 */
-	Helpers.viewMixin = function (from) {
+	Helpers.viewMixin = function(from) {
 
 		var to = this.prototype;
 
@@ -40,14 +40,14 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 * @param {object} from - methods which comes from mixin
 	 * @param {string} methodName - function name
 	 */
-	Helpers.extendMethod = function (to, from, methodName) {
+	Helpers.extendMethod = function(to, from, methodName) {
 
 		// if the method is defined on from ...
 		if (!_.isUndefined(from[methodName])) {
 			var old = to[methodName];
 
 			// ... we create a new function on to
-			to[methodName] = function () {
+			to[methodName] = function() {
 
 				// wherein we first call the method which exists on `to`
 				var oldReturn = old.apply(this, arguments);
@@ -69,19 +69,38 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 */
 	Backbone.View.mixin = Helpers.viewMixin;
 
+
+	/**
+	 * Detect transitionend event.
+	 */
+	Helpers.transitionEndEvent = function() {
+		var t;
+		var el = document.createElement('fakeelement');
+		var transitions = {
+			'transition': 'transitionend',
+			'OTransition': 'oTransitionEnd',
+			'MozTransition': 'transitionend',
+			'WebkitTransition': 'webkitTransitionEnd'
+		};
+
+		for (t in transitions) {
+			if (el.style[t] !== undefined) {
+				return transitions[t];
+			}
+		}
+	};
+
 	/**
 	 * Execute an action when orientation changed.
 	 */
-	Helpers.orientationChange = function () {
+	Helpers.orientationChange = function() {
 		switch (window.orientation) {
 			case -90:
 			case 90:
 				App.Vent.trigger('rotate:landscape');
-				location.reload();
 				break;
 			default:
 				App.Vent.trigger('rotate:portrait');
-				location.reload();
 				break;
 		}
 	};
@@ -92,7 +111,7 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 *
 	 * @param {string} url - URL to your script
 	 */
-	Helpers.checkScript = function (url) {
+	Helpers.checkScript = function(url) {
 		var x = document.getElementsByTagName("script");
 		var scriptAdded = false;
 
@@ -114,7 +133,7 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 * @param {fn} callbackFn - callback function
 	 * @param {this} callbackObj - this context
 	 */
-	Helpers.loadScript = function (url, callbackFn, callbackObj) {
+	Helpers.loadScript = function(url, callbackFn, callbackObj) {
 		var scriptAdded = Helpers.checkScript(url);
 
 		if (scriptAdded === false) {
@@ -127,12 +146,12 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 			if (scriptAdded === true) {
 				callbackFn.apply(callbackObj);
 			} else {
-				script.onreadystatechange = function () {
+				script.onreadystatechange = function() {
 					if (x.readyState == 'complete') {
 						callbackFn.apply(callbackObj);
 					}
 				};
-				script.onload = function () {
+				script.onload = function() {
 					callbackFn.apply(callbackObj);
 				};
 			}
@@ -146,30 +165,30 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 *
 	 * @param {string} regEx - Regular Expression
 	 */
-	Helpers.regExp = function (regEx) {
+	Helpers.regExp = function(regEx) {
 		return new RegExp("(^|\\s+)" + regEx + "(\\s+|$)");
 	};
 
 	if ('classList' in document.documentElement) {
-		Helpers.hasClass = function (elem, c) {
+		Helpers.hasClass = function(elem, c) {
 			return elem.classList.contains(c);
 		};
-		Helpers.addClass = function (elem, c) {
+		Helpers.addClass = function(elem, c) {
 			elem.classList.add(c);
 		};
-		Helpers.removeClass = function (elem, c) {
+		Helpers.removeClass = function(elem, c) {
 			elem.classList.remove(c);
 		};
 	} else {
-		Helpers.hasClass = function (elem, c) {
+		Helpers.hasClass = function(elem, c) {
 			return Helpers.regExp(c).test(elem.className);
 		};
-		Helpers.addClass = function (elem, c) {
+		Helpers.addClass = function(elem, c) {
 			if (!hasClass(elem, c)) {
 				elem.className = elem.className + ' ' + c;
 			}
 		};
-		Helpers.removeClass = function (elem, c) {
+		Helpers.removeClass = function(elem, c) {
 			elem.className = elem.className.replace(Helpers.regExp(c), ' ');
 		};
 	}
@@ -191,7 +210,7 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 * @param {string} paramName - parameter name
 	 * @param {string} paramValue - parameter value
 	 */
-	Helpers.addParamToUrl = function (url, paramName, paramValue) {
+	Helpers.addParamToUrl = function(url, paramName, paramValue) {
 		var urlParts = url.split('?');
 		var i = 0;
 		var baseUrl;
@@ -218,7 +237,7 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	/**
 	 * based on https://github.com/inuyaksa/jquery.nicescroll/blob/master/jquery.nicescroll.js
 	 */
-	Helpers.hasParent = function (e, p) {
+	Helpers.hasParent = function(e, p) {
 		if (!e) return false;
 		var el = e.target || e.srcElement || e || false;
 		while (el && el != p) {
@@ -234,7 +253,7 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 * @param {obj} el - Element, which will be checked
 	 * @param {obj} context - Context element, in which our element could persists
 	 */
-	Helpers.checkElementInContext = function (el, context) {
+	Helpers.checkElementInContext = function(el, context) {
 		var state = el.closest(context).length === 1;
 
 		return state;
@@ -246,7 +265,7 @@ define('helpers', ['App', 'backbone'], function (App, Backbone) {
 	 * @param {obj} obj1 - Object, which we want to check
 	 * @param {obj} obj2 - Element, which we want to check against equality
 	 */
-	Helpers.checkNodeEquality = function (obj1, obj2) {
+	Helpers.checkNodeEquality = function(obj1, obj2) {
 		return (obj1 === obj2);
 	};
 

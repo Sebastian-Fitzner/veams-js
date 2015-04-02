@@ -6,14 +6,15 @@
  */
 
 define('ui.carousel', [
-		'utils/mixins/imageLoader',
+		'App',
 		'jquery',
 		'backbone',
+		'helpers',
 		'modules/carousel/ui-carousel-pagination',
 		'touchSwipe',
-		'App'
+		'utils/mixins/imageLoader'
 	],
-	function(ImageLoader, $, Backbone, Pagination, TouchSwipe, App) {
+	function(App, $, Backbone, Helpers, Pagination, TouchSwipe, ImageLoader) {
 		/**
 		 * @alias module:Carousel
 		 */
@@ -23,18 +24,19 @@ define('ui.carousel', [
 				responsive: false,
 				slides: '[data-js-atom="carousel-list"]',
 				currentClass: 'is-current',
-				slideNextInFX: 'slide-moveFromRight',
-				slideNextOutFX: 'slide-moveToLeft',
-				slidePrevInFX: 'slide-moveFromLeft',
-				slidePrevOutFX: 'slide-moveToRight',
-				carouselSpinner: '[data-js-atom="spinner"]',
+				unresolvedClass: 'js-unresolved',
+				slideFadeClass: 'carousel__slides-visible',
+				slideLeftInFX: 'carousel__slide-left-in-fx',
+				slideLeftOutFX: 'carousel__slide-left-out-fx',
+				slideRightInFX: 'carousel__slide-right-in-fx',
+				slideRightOutFX: 'carousel__slide-right-out-fx ',
 				carouselPager: '[data-js-atom="pagination"]'
 			},
 
 			/** Standard events of our constructor */
 			events: {
-				'click [data-js-atom="pagination-prev"]': 'showPreviousElement',
-				'click [data-js-atom="pagination-next"]': 'showNextElement'
+				'click [data-js-atom="navigation-prev"]': 'showPreviousElement',
+				'click [data-js-atom="navigation-next"]': 'showNextElement'
 			},
 
 			/**
@@ -60,8 +62,6 @@ define('ui.carousel', [
 			 * - get carousel length
 			 */
 			_buildCarousel: function() {
-				$(this.options.carouselSpinner).remove();
-
 				if (this.options.responsive === true && !this.$el.find('[data-js-atom="carousel-list-group"]').length) {
 					this._makeItResponsive();
 					this.slide = this.slides.find('[data-js-atom="carousel-list-group"]');
@@ -117,7 +117,7 @@ define('ui.carousel', [
 
 				firstSlide
 					.addClass(this.options.currentClass)
-					.addClass(this.options.slideNextInFX);
+					.addClass(this.options.slideFadeClass);
 			},
 
 			/**
@@ -296,10 +296,11 @@ define('ui.carousel', [
 
 				// First we remove all classes from all slides
 				slides
-					.removeClass(this.options.slideNextInFX + " " +
-						this.options.slideNextOutFX + " " +
-						this.options.slidePrevInFX + " " +
-						this.options.slidePrevOutFX + " " +
+					.removeClass(this.options.slideLeftInFX + " " +
+						this.options.slideLeftOutFX + " " +
+						this.options.slideRightInFX + " " +
+						this.options.slideRightOutFX + " " +
+						this.options.slideFadeClass + " " +
 						this.options.currentClass
 					);
 
@@ -307,18 +308,18 @@ define('ui.carousel', [
 				if (direction === 'next') {
 					// Add classes to the last and current slide
 					slides.eq(this.lastSlide - 1)
-						.addClass(this.options.currentClass + " " + this.options.slideNextOutFX);
+						.addClass(this.options.currentClass + " " + this.options.slideLeftOutFX);
 
 					slides.eq(this.currentSlideIndex - 1)
-						.addClass(this.options.currentClass + " " + this.options.slideNextInFX);
+						.addClass(this.options.currentClass + " " + this.options.slideLeftInFX);
 
 				} else { // else
 					// Add classes to the last and current slide
 					slides.eq(this.lastSlide - 1)
-						.addClass(this.options.currentClass + " " + this.options.slidePrevOutFX);
+						.addClass(this.options.currentClass + " " + this.options.slideRightOutFX);
 
 					slides.eq(this.currentSlideIndex - 1)
-						.addClass(this.options.currentClass + " " + this.options.slidePrevInFX);
+						.addClass(this.options.currentClass + " " + this.options.slideRightInFX);
 
 				}
 
@@ -377,6 +378,8 @@ define('ui.carousel', [
 				this.getAndSetSlideDimensions();
 				this._bindEvents();
 				this.initPagination();
+
+				this.$el.removeClass(this.options.unresolvedClass);
 
 				// Maintains chainability
 				return this;

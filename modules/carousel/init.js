@@ -12,19 +12,14 @@ define('ui.carousel-init', ['jquery', 'App', 'ui.carousel'], function($, App, Ca
 
 
 	ui.CarouselInit.createdCallback = function() {
-		$(this).append('<div class="spinner" data-js-atom="spinner">' +
-			'<div class="spinner-db1"></div>' +
-			'<div class="spinner-db2"></div>' +
-			'</div>');
 		this.options = $(this).data('js-options');
+	};
+
+	ui.CarouselInit.attachedCallback = function() {
 		this.View = new Carousel({
 			el: $(this),
 			options: this.options
 		});
-	};
-
-	ui.CarouselInit.attachedCallback = function() {
-		// this.View.render();
 	};
 
 	ui.CarouselInit.detachedCallback = function() {

@@ -7,20 +7,21 @@
 define([
 		'jquery',
 		'underscore',
-		'App'
+		'App',
+		'helpers'
 	],
-	function($, _, App) {
+	function($, _, App, Helpers) {
 
 		var Sticky = function(obj) {
 			this.el = obj.el;
 			this.$el = $(obj.el);
 			this.height = this._getHeight(this.$el);
+			this.width = this._getWidth(this.$el);
 			this.top = this._getTopPosition(this.$el);
 
 			this.options = {
 				stickyClass: 'is-sticky',
 				fixedClass: 'is-fixed',
-				hiddenClass: 'is-hidden',
 				offset: false,
 				setWidth: true
 			};
@@ -29,7 +30,15 @@ define([
 		};
 
 		Sticky.prototype._getHeight = function(el) {
-			return el.attr('data-js-height', el.outerHeight());
+			var height = el.outerHeight();
+			el.attr('data-js-height', height);
+			return height;
+		};
+
+		Sticky.prototype._getWidth = function(el) {
+			var width = el.width();
+			el.attr('data-js-width', width);
+			return width;
 		};
 
 		Sticky.prototype._getTopPosition = function(el) {
@@ -51,10 +60,7 @@ define([
 
 		Sticky.prototype._setWidth = function() {
 			this.$el.removeAttr('style');
-
-			var width = this.$el.outerWidth();
-
-			this.$el.css('width', width);
+			this.$el.css('width', this.width);
 		};
 
 		Sticky.prototype._bindEvents = function() {
@@ -70,6 +76,13 @@ define([
 
 			App.Vent.on('navigation:open', this._addFixed, this);
 			App.Vent.on('navigation:close', this._removeFixed, this);
+			App.Vent.on('toggle:toggleContent', function(e) {
+				var el = $('#' + e.options.id);
+
+				el.one(Helpers.transitionEndEvent(), function() {
+					_this.top = _this._getTopPosition(_this.$el);
+				});
+			});
 		};
 
 		Sticky.prototype._getStickysHeight = function() {
