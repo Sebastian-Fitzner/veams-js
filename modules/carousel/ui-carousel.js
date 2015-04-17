@@ -218,7 +218,7 @@ define('ui.carousel', [
 
 				this.listenTo(App.Vent, 'resize', _.debounce(function() {
 					that.getAndSetSlideDimensions();
-				}), 300);
+				}, 300));
 			},
 
 			/**

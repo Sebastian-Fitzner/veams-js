@@ -72,7 +72,7 @@ define([
 
 			App.Vent.on('resize', _.debounce(function() {
 				_this._setWidth();
-			}), 300);
+			}, 300));
 
 			App.Vent.on('navigation:open', this._addFixed, this);
 			App.Vent.on('navigation:close', this._removeFixed, this);
