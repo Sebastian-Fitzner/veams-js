@@ -35,13 +35,13 @@ define('equalRowHeight', [
 				App.Vent.on('resize', function(element) {
 					that._reinit(that, timer);
 
-					that.options.isDebug && console.log('equalRowHeight:init');
+					that.isDebug && console.log('equalRowHeight:init');
 				});
 			},
 
 			_reinit: function(that, timer) {
 				clearTimeout(timer);
-				timer = setTimeout(that.render(), 250);
+				timer = setTimeout(that.render.bind(this), 250);
 			},
 
 			_resetStyles: function(el) {
