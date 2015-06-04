@@ -9,13 +9,28 @@ It consists of two basic approaches:
 
 Both approaches are realised with:
 
-- BackboneJS
-- RequireJS and RequireJS Text
+- BackboneJS/Exoskeleton
+- CommonJS with Browserify
 - jQuery
 
-Choose one of these approaches and copy the requirejs.js task in `helpers/_grunt` (only necessary if you use a PG setup).
+Choose one of these or both approaches.
 
-Then copy the dependencies of the bower file into your project and install them. 
+Then install the dependencies via npm:
+``` bash 
+npm i jquery exoskeleton touchswipe document-register-element handlebars respimage --save
+```
+
+Or copy these lines into your `package.json` and execute `npm i`: 
+``` json
+  "dependencies": {
+    "document-register-element": "^0.3.0",
+    "exoskeleton": "^0.7.0",
+    "handlebars": "^3.0.3",
+    "jquery": "^2.1.4",
+    "respimage": "^1.4.0",
+    "touchswipe": "^1.6.0"
+  }
+```
 
 ### Requirements
 
@@ -43,21 +58,12 @@ Just copy the files you need into the js folder in your project. The following f
 - `utils/helpers.js`
 - `utils/mixins/imageLoader.js`
 
-All files in the `modules` folder are optional and work in progress. Keep that in mind. 
-
-#### HTML Components
-
-- `app.js`
-- `config.js`
-- `main.js`
-- `utils/helpers.js`
-- `utils/mixins/imageLoader.js`
-
-All files in the `modules` folder are optional and work in progress. Keep that in mind. 
+All files in the `modules` folder are optional and work in progress. Keep that in mind.
 
 ### Modules
 
 Each module has an own `init` file which is only necessary when you use the `web components` approach. 
+You can also require the files you need and init the modules in your `main.js`.
 
 Furthermore there are `scss` and `hbs` files for each module, which you can use in your project. 
 

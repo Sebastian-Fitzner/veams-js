@@ -1,46 +1,48 @@
-define('ui.toggle-init', [
-		'jquery',
-		'App',
-		'ui.toggle'
-	],
-	function($, App, Toggle) {
+var $ = require('jquery');
+var App = require('../../app');
+var Toggle = require('./ui-toggle');
 
-		"use strict";
 
-		var ui = App.ui;
+"use strict";
 
-		ui.ToggleInit = Object.create(HTMLElement.prototype);
+var ui = App.ui;
 
-		ui.ToggleInit.options = {};
+ui.ToggleInit = Object.create(HTMLElement.prototype);
 
-		ui.ToggleInit.View = null;
+ui.ToggleInit.options = {};
 
-		ui.ToggleInit.createdCallback = function() {
-			var options;
-			this.options = $(this).data('js-options');
-			options = this.options;
-			this.View = new Toggle({
-				el: $(this),
-				options: this.options
-			});
-		};
+ui.ToggleInit.View = null;
 
-		ui.ToggleInit.attachedCallback = function() {
-			this.View.render();
-		};
+ui.ToggleInit.createdCallback = function() {
 
-		ui.ToggleInit.detachedCallback = function() {
-			this.View.remove();
-		};
+};
 
-		ui.ToggleInit.attributeChangedCallback = function(name, previousValue, value) {
-			// implement code for handling attribute changes
-		};
+ui.ToggleInit.attachedCallback = function() {
+	var options;
 
-		document.registerElement('ui-toggle', {
-			prototype: ui.ToggleInit
-		});
+	if ($(this).data('cloned')) return;
 
-		return ui.ToggleInit;
+	this.options = $(this).data('js-options');
+	options = this.options;
 
+	this.View = new Toggle({
+		el: $(this),
+		options: this.options
 	});
+};
+
+ui.ToggleInit.detachedCallback = function() {
+	if (!this.View) return;
+
+	this.View.remove();
+};
+
+ui.ToggleInit.attributeChangedCallback = function(name, previousValue, value) {
+	// implement code for handling attribute changes
+};
+
+document.registerElement('ui-toggle', {
+	prototype: ui.ToggleInit
+});
+
+module.exports = ui.ToggleInit;

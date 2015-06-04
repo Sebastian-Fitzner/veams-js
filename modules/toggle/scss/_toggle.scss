@@ -6,7 +6,7 @@ TOGGLE MODULE
 Global Styles
 --------------------------------------------------- */
 
-[data-css="m-toggle"] {
+[data-js-module="toggle"] {
 	&.is-unresolved {
 		position: absolute;
 		visibility: hidden;

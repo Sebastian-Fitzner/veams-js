@@ -1,0 +1,16 @@
+---
+module: slider
+---
+<ui-slider class="slider{{#if sliderModifierClass}}--{{sliderModifierClass}}{{/if}}{{#if sliderClasses}} {{sliderClasses}}{{/if}}" data-css="m-slider"{{#if sliderOptions}} data-js-options='{ {{#each sliderOptions}}"{{sliderKey}}": "{{{sliderValue}}}"{{#if @last}}{{else}}, {{/if}}{{/each}} }'{{/if}}>
+
+	<div class="slider__list-wrapper" data-js-atom="slider-wrapper">
+		<div class="slider__list" data-js-atom="slider-ribbon">
+			{{#each slider-items}}
+				<div class="slider__item" data-js-atom="slider-item">
+					{{> c-slider}}
+				</div>
+			{{/each}}
+		</div>
+	</div>
+	{{!> c-pager pager }}
+</ui-slider>
