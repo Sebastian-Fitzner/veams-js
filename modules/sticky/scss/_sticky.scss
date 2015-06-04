@@ -6,16 +6,26 @@ STICKY MODULE
 Global Styles
 --------------------------------------------------- */
 
-.is-sticky {
-	@include prefix(transform, translate(-50%, 0px));
-	@include prefix(backface-visibility, hidden);
+.is-sticky, .is-fixed {
+	@include transform(translate(-50%, 0px));
+	@include backface-visibility(hidden);
 
-	position: fixed;
-	width: 100%;
-	top: 0;
-	z-index: 100;
 	border-top: 0;
 	float: none;
 	left: 50%;
 	perspective: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+/* ---------------------------------------------------
+Clone Element
+- to keep the initial height of the page
+--------------------------------------------------- */
+.is-clone {
+	@include float;
+
+	display: block;
 }
