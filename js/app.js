@@ -1,11 +1,12 @@
 // Links:
 // http://www.html5rocks.com/en/tutorials/webcomponents/customelements/
 // https://developer.mozilla.org/en-US/docs/DOM/DOM_Reference#HTML_interfaces
+var Helpers = require('./utils/helpers');
 var $ = require('jquery');
 var Exo = require('exoskeleton');
-var Helpers = require('./utils/helpers');
+// require('backbone.touch');
 
-module.exports = (function() {
+module.exports = (function () {
 	'use strict';
 
 	// Save a reference to the global object
@@ -26,7 +27,7 @@ module.exports = (function() {
 	 * take this view in our modules
 	 * register only one reference to our global library Exoskeleton
 	 */
-	App.ComponentView = function(options) {
+	App.ComponentView = function (options) {
 		Exo.View.call(this, options);
 	};
 
@@ -42,7 +43,8 @@ module.exports = (function() {
 
 	// Feature detection
 	App.support = App.support || {};
-	App.support.touch = 'ontouchstart' in window;
+	App.support.touch = Helpers.isTouch();
+	App.clickHandler = Helpers.clickHandler();
 
 	// Versioning
 	App.version = "0.0.1";
@@ -54,14 +56,16 @@ module.exports = (function() {
 	// devmode logging
 	if (document.location.search.indexOf('devmode') < 0 && document.querySelectorAll('html')[0].className.indexOf('ie9') < 0) {
 		// hide all warnings and logs if not in devmode
-		console.log = function() {};
-		console.warn = function() {};
+		console.log = function () {
+		};
+		console.warn = function () {
+		};
 	} else {
 		App.devmode = true;
 	}
 
 	// Trigger global resize event
-	window.onresize = function(e) {
+	window.onresize = function (e) {
 		var currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
 
 		if (currentMedia !== App.currentMedia) {
@@ -80,7 +84,7 @@ module.exports = (function() {
 		App.Vent.trigger('resize', e);
 	};
 
-	document.onscroll = function(e) {
+	document.onscroll = function (e) {
 		App.Vent.trigger('scroll', e);
 	};
 

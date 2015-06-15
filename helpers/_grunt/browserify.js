@@ -1,6 +1,9 @@
 var libs = [
 	'jquery',
 	'exoskeleton',
+	// 'backbone',
+	// 'underscore',
+	// 'backbone.touch',
 	'respimage',
 	'touchswipe',
 	'handlebars/runtime',
@@ -27,7 +30,8 @@ module.exports = {
 			external: libs,
 			browserifyOptions: {
 				debug: true
-			}
+			},
+			watch: true
 		},
 		files: {
 			'<%= paths.dev %>/js/main.js': '<%= paths.src %>/js/main.js'

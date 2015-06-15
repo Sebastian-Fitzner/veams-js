@@ -5,13 +5,13 @@ PG-JS Starter Kit contains a simple setup for a general JavaScript workflow.
 It consists of two basic approaches:
 
 1. [Web Components](_setup-web-components/README.md) or
-2. [HTML Components](_setup-html-components/README.md)
+2. HTML Components (just add an attribute to your markup)
 
 Both approaches are realised with:
 
 - BackboneJS/Exoskeleton
 - CommonJS with Browserify
-- jQuery
+- jQuery (in future this will be replaced)
 
 Choose one of these or both approaches.
 
@@ -55,14 +55,13 @@ Just copy the files you need into the js folder in your project. The following f
 
 - `app.js`
 - `main.js`
-- `utils/helpers.js`
-- `utils/mixins/imageLoader.js`
+- `utils/**/*.js`
 
 All files in the `modules` folder are optional and work in progress. Keep that in mind.
 
 ### Modules
 
-Each module has an own `init` file which is only necessary when you use the `web components` approach. 
+Each web component has its own `init` file (in version 2.0.0 there will be a helper function). 
 You can also require the files you need and init the modules in your `main.js`.
 
 Furthermore there are `scss` and `hbs` files for each module, which you can use in your project. 
