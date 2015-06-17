@@ -12,7 +12,11 @@
  */
 var Helpers = {};
 
-// Extend objects
+/**
+ * Simple extend method to extend the properties of an object.
+ *
+ * @param {obj} obj - object which will be extended
+ */
 Helpers.extend = function extend(obj) {
 	[].slice.call(arguments, 1).forEach(function (item) {
 		for (var key in item) obj[key] = item[key];
@@ -20,6 +24,11 @@ Helpers.extend = function extend(obj) {
 	return obj;
 };
 
+/**
+ * Simple extend method, which extends an object.
+ *
+ * @param {obj} obj - object which will be extended
+ */
 Helpers.defaults = function defaults(obj) {
 	[].slice.call(arguments, 1).forEach(function (item) {
 		for (var key in item)
@@ -29,6 +38,12 @@ Helpers.defaults = function defaults(obj) {
 	return obj;
 };
 
+/**
+ * Find index of a specific item in an array.
+ *
+ * @param {array} array - array in which we search for
+ * @param {obj} item - item which will be searched
+ */
 Helpers.indexOf = function (array, item) {
 	if (array == null) return -1;
 	var i, l;
@@ -37,6 +52,7 @@ Helpers.indexOf = function (array, item) {
 		if (array[i] === item) return i;
 	return -1;
 };
+
 /**
  * Merge views method functions.
  * @param {object} from - Mixin object which will be merged via Helpers.defaults with the methods of our view
@@ -56,7 +72,6 @@ Helpers.viewMixin = function (from) {
 	/** Extend `to`'s `initialize` */
 	Helpers.extendMethod(to, from, 'initialize');
 };
-
 
 /**
  * Helper method to extend an already existing method.
@@ -88,7 +103,6 @@ Helpers.extendMethod = function (to, from, methodName) {
 
 		};
 	}
-
 };
 
 /**
