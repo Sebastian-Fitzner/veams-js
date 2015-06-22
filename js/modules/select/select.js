@@ -2,8 +2,9 @@
  * Based on selectFx.js v1.0.0
  * http://www.codrops.com
  */
-var Helpers = require('../../utils/helpers');
-var App = require('../../app');
+import Helpers from '../../utils/helpers';
+import App from '../../app';
+
 var $ = App.$;
 
 var SelectFx = App.ComponentView.extend({
@@ -252,4 +253,4 @@ var SelectFx = App.ComponentView.extend({
 	}
 });
 
-module.exports = SelectFx;
+export default SelectFx;

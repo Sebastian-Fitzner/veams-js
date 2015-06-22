@@ -12,9 +12,9 @@ var libs = [
 
 module.exports = {
 	options: {
-		//transform: [
-		//	["babelify", {"stage": 0}]
-		//]
+		transform: [
+			["babelify", {"stage": 0}]
+		]
 	},
 	vendor: {
 		src: ['.'],

@@ -4,34 +4,25 @@
  * @author Sebastian Fitzner
  */
 
-var Helpers = require('../../utils/helpers');
-var App = require('../../app');
+import Helpers from '../../utils/helpers';
+import App from '../../app';
 var $ = App.$;
-var ImageLoader = require('../../utils/mixins/imageLoader');
+import ImageLoader from '../../utils/mixins/imageLoader';
 
 var Toggle = App.ComponentView.extend({
 	options: {
-		open: false, // mobile, tablet, desktop-small, desktop
+		open: false, // array: viewport names - eg.: ['mobile', 'tablet', 'desktop-small', 'desktop']
 		activeClass: 'is-visible',
-		useMaxHeight: false, // number => 10000
+		useMaxHeight: App.support.touch ? 10000 : false, // number => 10000
 		singleOpen: false,
-		togglePush: false // data-js-ref="toggle-push"
+		togglePush: false, // data-js-ref="toggle-push"
+		index: false // number: index of toggle in context, used in showNext mode
 	},
 	// View constructor
-	initialize: function (obj) {
-		this.options = _.defaults(obj.options || {}, this.options);
+	initialize: function(obj) {
+		this.options = Helpers.defaults(obj.options || {}, this.options);
 		this.elId = this.$el.attr('id');
 		this.heightProp = this.options.useMaxHeight !== false ? 'max-height' : 'height';
-
-		if (!this.options.useMaxHeight) {
-			this.elClone = this._cloneIt();
-			this.elHeight = this.elClone.outerHeight(true);
-			this.elClone.remove();
-		} else {
-			this.elHeight = this.options.useMaxHeight;
-		}
-
-		this.$el.removeClass('is-unresolved').css(this.heightProp, 0);
 
 		if (this.options.togglePush) {
 			this.pushEl = this.$el.closest('[data-js-ref="toggle-push"]');
@@ -44,55 +35,109 @@ var Toggle = App.ComponentView.extend({
 		this._bindEvents();
 	},
 
-	_cloneIt: function () {
-		var styles = 'position: absolute, display: block, left: -9999px';
-		var width = this.$el.outerWidth(true);
+	_computeElHeight: function() {
+		if (!this.options.useMaxHeight) {
+			this.elClone = this._cloneIt();
 
-		return this.$el.clone().attr('style', styles).css('width', width).appendTo('body');
+			clearTimeout(this.timeout);
+
+			this.timeout = setTimeout(() => {
+				this.elHeight = this.elClone.outerHeight(true);
+				this.elClone.remove();
+				this.$el.removeAttr('data-cloned');
+
+				if (this.$el.is('.' + this.options.activeClass)) {
+					this.$el.css('height', this.elHeight);
+				}
+			}, 0);
+
+		} else {
+			this.elHeight = this.options.useMaxHeight;
+		}
 	},
 
-	_checkOpening: function () {
+	_cloneIt: function() {
+		var width = this.$el.outerWidth(true);
+		var styles = {
+			position: 'absolute',
+			display: 'block',
+			left: -9999,
+			width: width,
+			height: 'auto'
+		};
+
+		return this.$el.attr('data-cloned', true).clone().css(styles).appendTo(document.body);
+	},
+
+	_checkOpening: function() {
 		var falsy = false;
-		_.each(this.options.open, function (el) {
+		this.options.open.forEach(function(el) {
 			if (el === App.currentMedia) {
 				falsy = true;
 			}
 		});
 
-		if (falsy !== false) {
+		if (this.options.open === 'true' || falsy !== false) {
 			this.openElement();
 		} else {
 			this.closeElement();
 		}
 	},
 
-	_bindEvents: function () {
+	_bindEvents: function() {
+		var that = this;
+
 		this.listenTo(App.Vent, 'toggle:toggleContent', this.toggleContent);
+		this.listenTo(App.Vent, 'toggle:showNextContent', this.showNextContent);
+		this.listenTo(App.Vent, 'resize', setTimeout(function() {
+			that._computeElHeight();
+		}, 300));
 	},
 
-	toggleContent: function (obj) {
-		var toggleId = obj.options.id;
-		this.context = obj.options.context;
+	showNextContent: function(obj) {
+		var context = obj.options.context;
 
+		if (Helpers.checkElementInContext(this.$el, context)) {
+			if (obj.options.showNextIndex === this.options.index) {
+				this.openElement();
 
-		if (Helpers.checkElementInContext(this.$el, this.context) && this.options.singleOpen === true) {
-			if (this._checkId(toggleId)) {
-				this.$el.is('.' + this.options.activeClass) ? this.closeElement() : this.openElement();
-			} else {
-				this.closeElement();
-			}
-		} else {
-			if (this._checkId(toggleId)) {
-				this.$el.is('.' + this.options.activeClass) ? this.closeElement() : this.openElement();
+				if (this.$el.is(':last-of-type')) {
+					obj.el.trigger('toggle:lastopened');
+				}
 			}
 		}
 	},
 
-	_checkId: function (id) {
+	toggleContent: function(obj) {
+		var toggleId = obj.options.id;
+		var context = obj.options.context;
+		var toggleAll = obj.options.toggleAll === 'true';
+
+
+		if (Helpers.checkElementInContext(this.$el, context)) {
+			if (toggleAll) {
+				obj.el.is('.' + obj.options.activeClass) ? this.closeElement() : this.openElement();
+			} else {
+				if (this.options.singleOpen === 'true') {
+					if (this._checkId(toggleId)) {
+						this.$el.is('.' + this.options.activeClass) ? this.closeElement() : this.openElement();
+					} else {
+						this.closeElement();
+					}
+				} else {
+					if (this._checkId(toggleId)) {
+						this.$el.is('.' + this.options.activeClass) ? this.closeElement() : this.openElement();
+					}
+				}
+			}
+		}
+	},
+
+	_checkId: function(id) {
 		if (this.elId === id) return true;
 	},
 
-	openElement: function () {
+	openElement: function() {
 		if (this.options.togglePush) {
 			this.pushEl.css('padding-bottom', this.elHeight);
 		}
@@ -100,7 +145,7 @@ var Toggle = App.ComponentView.extend({
 		this.$el.addClass(this.options.activeClass).css(this.heightProp, this.elHeight);
 	},
 
-	closeElement: function () {
+	closeElement: function() {
 		this.$el.removeClass(this.options.activeClass).css(this.heightProp, 0);
 
 		if (this.options.togglePush) {
@@ -109,7 +154,9 @@ var Toggle = App.ComponentView.extend({
 	},
 
 	// Renders the view's template to the UI
-	render: function () {
+	render: function() {
+		this._computeElHeight();
+		this.$el.removeClass('is-unresolved').css(this.heightProp, 0);
 		if (this.options.open) this._checkOpening();
 
 		// Maintains chainability
@@ -117,8 +164,9 @@ var Toggle = App.ComponentView.extend({
 	}
 });
 
+
 /** Use mixin to extend our view with `ImageLoader` */
 Toggle.mixin(ImageLoader);
 
 // Returns the View class
-module.exports = Toggle;
+export default Toggle;

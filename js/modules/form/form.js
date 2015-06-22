@@ -1,31 +1,30 @@
-var Helpers = require('../../utils/helpers');
-var App = require('../../app');
+import Helpers from '../../utils/helpers';
+import App from '../../app';
+import SelectFx from '../select/select';
+import AppModule from '../_global/moduleView';
+
 var $ = App.$;
-var SelectFx = require('../select/select');
 
-var Form = function (obj) {
-	this.el = obj.el;
-	this.$el = $(obj.el);
+class Form extends AppModule {
+	constructor(obj) {
+		var options = {};
 
-	this.options = {};
+		super(obj, options);
+	}
 
-	this.options = Helpers.defaults(obj.options || {}, this.options);
-	this.initialize();
-};
+	initialize() {
+		this.form = this.$el.find('form');
+	}
 
-Form.prototype.initialize = function () {
-	this.form = this.$el.find('form');
-};
-
-
-Form.prototype.render = function () {
-	$('select', this.$el).each(function () {
-		new SelectFx({
-			el: $(this),
-			options: $(this).data('js-options')
+	render() {
+		Helpers.forEach($('select', this.$el), (i, el) => {
+			new SelectFx({
+				el: $(el),
+				options: $(el).data('js-options')
+			});
 		});
-	});
-};
+	}
+}
 
 // Returns constructor
-module.exports = Form;
+export default Form;

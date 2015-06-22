@@ -2,44 +2,48 @@
  * @module Slide Fox
  *
  * @author Andy Gutsche
+ * @refactoring Sebastian Fitzner
  */
 
-var Helpers = require('../../utils/helpers');
-var App = require('../../app');
+import Helpers from '../../utils/helpers';
+import App from '../../app';
+
 var $ = App.$;
 
-var SlideFox = function(obj) {
-	this.el = obj.el;
-	this.$el = $(obj.el);
+class SlideFox {
+	constructor(obj) {
+		this.el = obj.el;
+		this.$el = $(obj.el);
 
-	this.options = {
-		visibleClass: 'is-visible'
-	};
+		this.options = {
+			visibleClass: 'is-visible'
+		};
 
-	this.options = Helpers.defaults(obj.options || {}, this.options);
+		this.options = Helpers.defaults(obj.options || {}, this.options);
 
-	this.initialize();
-};
+		this.initialize();
+	}
 
-SlideFox.prototype.initialize = function() {
-	this.bindEvents();
-};
+	initialize() {
+		this.bindEvents();
+	}
 
-SlideFox.prototype.bindEvents = function() {
-	App.Vent.on('scroll', this.render.bind(this));
-};
+	bindEvents() {
+		App.Vent.on('scroll', this.render.bind(this));
+	}
 
-SlideFox.prototype.showSlideFox = function() {
-	this.$el.addClass(this.options.visibleClass);
-};
+	showSlideFox() {
+		this.$el.addClass(this.options.visibleClass);
+	}
 
-SlideFox.prototype.hideSlideFox = function() {
-	this.$el.removeClass(this.options.visibleClass);
-};
+	hideSlideFox() {
+		this.$el.removeClass(this.options.visibleClass);
+	}
 
-SlideFox.prototype.render = function () {
-	Helpers.isInViewport(this.$el) ? this.showSlideFox() : this.hideSlideFox();
-};
+	render() {
+		Helpers.isInViewport(this.$el) ? this.showSlideFox() : this.hideSlideFox();
+	}
+}
 
 // Returns the constructor
-module.exports = SlideFox;
+export default SlideFox;

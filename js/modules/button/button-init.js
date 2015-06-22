@@ -4,37 +4,47 @@
  * @author Sebastian Fitzner
  */
 
-var App = require('../../app');
+import App from '../../app';
+import ButtonView from './button';
+import AppModule from '../_global/moduleView';
+
 var $ = App.$;
-var ButtonView = require('./button');
 
-var Button = function(obj) {
-	this.el = obj.el;
-	this.$el = $(obj.el);
+class ButtonInit extends AppModule {
+	/**
+	 * Constructor fn for our class
+	 *
+	 * @see moduleView.js
+	 *
+	 * @param {obj} obj - Object which is passed to our class
+	 * @param {obj.el} obj - element which will be saved in this.el
+	 * @param {obj.options} obj - options which will be passed in as JSON object
+	 */
+	constructor(obj) {
+		var options = {};
+		super(obj, options);
+	}
 
-	this.options = obj.options;
-	this.initialize();
-};
-
-Button.prototype.initialize = function() {
-	var _this = this;
-
-	_this.button = new ButtonView({
-		el: this.$el,
-		options: this.options
-	});
-
-	_this.button.clickHandler = function() {
-		App.Vent.trigger(_this.options.globalEvent, {
-			el: _this.$el,
-			options: _this.options
+	/**
+	 * Initialize class
+	 */
+	initialize() {
+		this.button = new ButtonView({
+			el: this.$el,
+			options: this.options
 		});
-	};
 
-};
+		this.button.clickHandler = () => {
+			App.Vent.trigger(this.options.globalEvent, {
+				el: this.$el,
+				options: this.options
+			});
+		};
+	}
 
-Button.prototype.render = function() {
-	this.button.render();
-};
+	render() {
+		this.button.render();
+	}
+}
 
-module.exports = Button;
+export default ButtonInit;

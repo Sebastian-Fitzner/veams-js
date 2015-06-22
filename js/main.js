@@ -1,33 +1,45 @@
 // Main Requirements
-var $ = require('jquery');
-var App = require('./app');
-var Helpers = require('./utils/helpers');
+import App from './app';
+import Helpers from './utils/helpers';
+
 require('respimage');
 require('document-register-element');
 
-// Modules
-var Button = require('./modules/button/button-init');
-var EqualRows = require('./modules/equal-row-height/equal-row-heights');
-var Form = require('./modules/form/form');
+var $ = App.$;
+
+// ES6 Modules
+import EqualRows from './modules/equal-row-height/equal-row-heights';
+import Toggle from './modules/toggle/ui-toggle';
+import ButtonInit from './modules/button/button-init';
+import Form from './modules/form/form';
+
 
 "use strict";
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 
 	console.log('App initialized with version: ', App.version);
 
 	/**
 	 * Init Buttons
 	 */
-	Helpers.loadModules({
+	Helpers.loadModule({
 		el: '[data-js-module="button"]',
-		Module: Button
+		Module: ButtonInit
+	});
+
+	/**
+	 * Init Toggle
+	 */
+	Helpers.loadModule({
+		el: '[data-js-module="toggle"]',
+		Module: Toggle
 	});
 
 	/**
 	 * Init Forms
 	 */
-	Helpers.loadModules({
+	Helpers.loadModule({
 		el: '[data-js-module~="form"]',
 		Module: Form
 	});
@@ -35,13 +47,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	/**
 	 * Init Equal Rows
 	 */
-	Helpers.loadModules({
+	Helpers.loadModule({
 		el: '[data-js-module~="equal"]',
 		Module: EqualRows,
 		render: false,
-		cb: function (module, options) {
+		cb: function(module, options) {
 			if (options && options.delayInit) {
-				$(window).load(function () {
+				$(window).load(function() {
 					module._reinit(module);
 				});
 			}

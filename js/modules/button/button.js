@@ -5,11 +5,11 @@
  * @author Sebastian Fitzner
  */
 
-var Helpers = require('../../utils/helpers');
-var App = require('../../app');
+import Helpers from '../../utils/helpers';
+import App from '../../app';
 var $ = App.$;
 
-App.ui.Button = App.ComponentView.extend({
+var ButtonView = App.ComponentView.extend({
 
 	/**
 	 * Options for the view
@@ -43,31 +43,6 @@ App.ui.Button = App.ComponentView.extend({
 	_bindEvents: function () {
 		this.listenTo(App.Vent, 'button:close', this.close);
 		this.listenTo(App.Vent, 'button:open', this.open);
-	},
-
-	// Renders the view's template to the UI
-	render: function () {
-		// Maintains chainability
-		return this;
-	},
-
-	/**
-	 * Click event method
-	 *
-	 * This method should be overriden when you want to use the button view
-	 * @see button-init.js
-	 *
-	 * @param {event} evt - event object
-	 */
-	onClick: function (evt) {
-		evt.preventDefault();
-
-		if (typeof this.clickHandler === 'function') {
-			this.clickHandler.apply(this, arguments);
-			this.handleClasses();
-		} else {
-			console.log('You need to inherit from ' + this + ' and override the onClick method or pass a function to ' + this + '.clickHandler !');
-		}
 	},
 
 	/**
@@ -117,7 +92,33 @@ App.ui.Button = App.ComponentView.extend({
 				this.$el.removeClass(this.options.activeClass);
 			}
 		}
+	},
+
+	/**
+	 * Click event method
+	 *
+	 * This method should be overriden when you want to use the button view
+	 * @see button-init.js
+	 *
+	 * @param {event} evt - event object
+	 */
+	onClick: function (evt) {
+		evt.preventDefault();
+
+		if (typeof this.clickHandler === 'function') {
+			this.clickHandler.apply(this, arguments);
+			this.handleClasses();
+		} else {
+			console.log('You need to inherit from ' + this + ' and override the onClick method or pass a function to ' + this + '.clickHandler !');
+		}
+	},
+
+	// Renders the view's template to the UI
+	render: function () {
+		// Maintains chainability
+		return this;
 	}
+
 });
 
-module.exports = App.ui.Button;
+export default ButtonView;

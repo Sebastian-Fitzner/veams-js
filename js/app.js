@@ -1,25 +1,24 @@
-// Links:
-// http://www.html5rocks.com/en/tutorials/webcomponents/customelements/
-// https://developer.mozilla.org/en-US/docs/DOM/DOM_Reference#HTML_interfaces
-var Helpers = require('./utils/helpers');
+import Helpers from './utils/helpers';
 var $ = require('jquery');
 var Exo = require('exoskeleton');
 // require('backbone.touch');
 
-module.exports = (function () {
+export default (function () {
 	'use strict';
 
 	// Save a reference to the global object
 	var root = window;
+	root.Backbone = {};
+	root.Backbone.$ = $;
 
 	// @borrow objects
 	var App = root.App = Helpers.extend(window.App || {}, {
-		Vent: Helpers.extend({}, Exo.Events),
+		Vent: Helpers.extend({}, Exoskeleton.Events),
 		ui: {}
 	});
 
 	// Add globals
-	App.Exo = Exo;
+	App.Exoskeleton = Exoskeleton;
 	App.$ = $;
 
 	/**
@@ -28,16 +27,16 @@ module.exports = (function () {
 	 * register only one reference to our global library Exoskeleton
 	 */
 	App.ComponentView = function (options) {
-		Exo.View.call(this, options);
+		Exoskeleton.View.call(this, options);
 	};
 
-	Helpers.extend(App.ComponentView.prototype, Exo.View.prototype, {
+	Helpers.extend(App.ComponentView.prototype, Exoskeleton.View.prototype, {
 		// base functions will be implemented here
 	});
 
-	App.ComponentView.extend = Exo.View.extend;
+	App.ComponentView.extend = Exoskeleton.View.extend;
 	/**
-	 * Add our Mixin to our Backbone.View object.
+	 * Add our Mixin to our Exoskeleton.View object.
 	 */
 	App.ComponentView.mixin = Helpers.viewMixin;
 
@@ -47,7 +46,7 @@ module.exports = (function () {
 	App.clickHandler = Helpers.clickHandler();
 
 	// Versioning
-	App.version = "0.0.1";
+	App.version = "0.1.1-4";
 
 	// Media Query
 	var head = document.querySelectorAll('head');

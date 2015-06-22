@@ -4,11 +4,11 @@
  *
  * @author Sebastian Fitzner
  */
-var Helpers = require('../../utils/helpers');
-var App = require('../../app');
-var $ = App.$;
-var ImageLoader = require('../../utils/mixins/imageLoader');
+import Helpers from '../../utils/helpers';
+import App from '../../app';
+import ImageLoader from '../../utils/mixins/imageLoader';
 
+var $ = App.$;
 
 var EqualHeight = App.ComponentView.extend({
 
@@ -25,11 +25,10 @@ var EqualHeight = App.ComponentView.extend({
 	},
 
 	_bindEvents: function () {
-		var that = this,
-			timer;
+		var timer;
 
-		App.Vent.on('resize', function () {
-			that._reinit(that, timer);
+		App.Vent.on('resize', () => {
+			this._reinit(this, timer);
 		});
 	},
 
@@ -43,10 +42,8 @@ var EqualHeight = App.ComponentView.extend({
 	},
 
 	_setLastRowClass: function (element) {
-		var that = this;
-
-		$(element).each(function () {
-			$(this).addClass(that.options.lastRowClass);
+		Helpers.forEach($(element), (el) => {
+			$(el).addClass(this.options.lastRowClass);
 		});
 	},
 
@@ -54,20 +51,20 @@ var EqualHeight = App.ComponentView.extend({
 		var that = this;
 		var rows = [];
 		var posArray = [];
-		var firstElTopPos = $(this.options.childElements).eq(0).offset().top;
+		var firstElTopPos = $(this.options.childElements).eq(0).offsetTop;
 
-		el.each(function () {
-			var el = $(this);
+		Helpers.forEach(el, (i, element) => {
+			var el = $(element);
 
 			that._resetStyles(el);
 
-			if (el.offset().top === firstElTopPos) {
+			if (el.offsetTop === firstElTopPos) {
 				posArray.push(el);
 			} else {
 				rows.push(posArray);
 				posArray = [];
 				posArray.push(el);
-				firstElTopPos = el.offset().top;
+				firstElTopPos = el.offsetTop;
 			}
 
 		});
@@ -95,8 +92,8 @@ var EqualHeight = App.ComponentView.extend({
 	getRowHeight: function (elements) {
 		var height = 0;
 
-		$(elements).each(function () {
-			height = $(this).outerHeight() > height ? $(this).outerHeight() : height;
+		Helpers.forEach(elements, (i, el) => {
+			height = Helpers.getOuterHeight(el) > height ? Helpers.getOuterHeight(el) : height;
 		});
 
 		return height;
@@ -105,10 +102,8 @@ var EqualHeight = App.ComponentView.extend({
 	setHeight: function (elements, height, padding) {
 		var addPadding = padding || 0;
 
-		$(elements).each(function () {
-			$(this).css({
-				'height': height + addPadding
-			});
+		Helpers.forEach(elements, (i, el) => {
+			el[0].style.height = height + addPadding + 'px';
 		});
 	},
 
@@ -118,21 +113,19 @@ var EqualHeight = App.ComponentView.extend({
 
 		this.buildRow(listEl);
 
-		// Trigger render event of equal row height module
-		setTimeout(function () {
+		setTimeout(() => {
 			App.Vent.trigger('equal:render', {
-				el: _this.$el,
-				childElements: _this.options.childElements
+				el: this.$el,
+				childElements: this.options.childElements
 			});
 		}, 0);
 
 		// Maintains chainability
 		return this;
 	}
-
 });
 
 EqualHeight.mixin(ImageLoader);
 
 // Returns the View class
-module.exports = EqualHeight;
+export default EqualHeight;

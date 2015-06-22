@@ -10,8 +10,8 @@ It consists of two basic approaches:
 Both approaches are realised with:
 
 - BackboneJS/Exoskeleton
-- CommonJS with Browserify
-- jQuery (in future this will be replaced)
+- ES Harmony with Browserify and Babel
+- jQuery (in future this can be replaced)
 
 Choose one of these or both approaches.
 

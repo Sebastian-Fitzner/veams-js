@@ -4,8 +4,9 @@
  *
  * @author Sebastian Fitzner
  */
+import Helpers from '../../utils/helpers';
+import App from '../../app';
 
-var App = require('../../app');
 var $ = App.$;
 
 "use strict";
@@ -51,12 +52,10 @@ var ImageLoader = {
 	 */
 	_checkImageLoading: function (imgs, loadedImgs, totalImgs) {
 		var timeout;
-		var that = this;
-
 		loadedImgs = 0;
 
-		imgs.each(function () {
-			if (this.complete) {
+		Helpers.forEach(imgs, (i, el) => {
+			if (el.complete) {
 				loadedImgs++;
 			}
 		});
@@ -64,16 +63,15 @@ var ImageLoader = {
 		if (loadedImgs === totalImgs) {
 			clearTimeout(timeout);
 
-			timeout = setTimeout(function () {
-				that.render();
+			timeout = setTimeout(() => {
+				this.render();
 			}, 0);
 		} else {
-			timeout = setTimeout(function () {
-				that._checkImageLoading(imgs, loadedImgs, totalImgs);
+			timeout = setTimeout(() => {
+				this._checkImageLoading(imgs, loadedImgs, totalImgs);
 			}, 10);
 		}
 	}
-
 };
 
-module.exports = ImageLoader;
+export default ImageLoader;

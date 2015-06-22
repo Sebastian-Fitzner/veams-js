@@ -18,7 +18,7 @@ var Helpers = {};
  * @param {obj} obj - object which will be extended
  */
 Helpers.extend = function extend(obj) {
-	[].slice.call(arguments, 1).forEach(function (item) {
+	[].slice.call(arguments, 1).forEach((item) => {
 		for (var key in item) obj[key] = item[key];
 	});
 	return obj;
@@ -30,7 +30,7 @@ Helpers.extend = function extend(obj) {
  * @param {obj} obj - object which will be extended
  */
 Helpers.defaults = function defaults(obj) {
-	[].slice.call(arguments, 1).forEach(function (item) {
+	[].slice.call(arguments, 1).forEach((item) => {
 		for (var key in item)
 			if (obj[key] === undefined)
 				obj[key] = item[key];
@@ -44,7 +44,7 @@ Helpers.defaults = function defaults(obj) {
  * @param {array} array - array in which we search for
  * @param {obj} item - item which will be searched
  */
-Helpers.indexOf = function (array, item) {
+Helpers.indexOf = function(array, item) {
 	if (array == null) return -1;
 	var i, l;
 
@@ -57,7 +57,7 @@ Helpers.indexOf = function (array, item) {
  * Merge views method functions.
  * @param {object} from - Mixin object which will be merged via Helpers.defaults with the methods of our view
  */
-Helpers.viewMixin = function (from) {
+Helpers.viewMixin = function(from) {
 
 	var to = this.prototype;
 
@@ -79,7 +79,7 @@ Helpers.viewMixin = function (from) {
  * @param {object} from - methods which comes from mixin
  * @param {string} methodName - function name
  */
-Helpers.extendMethod = function (to, from, methodName) {
+Helpers.extendMethod = function(to, from, methodName) {
 	function isUndefined(value) {
 		return typeof value == 'undefined';
 	}
@@ -89,7 +89,7 @@ Helpers.extendMethod = function (to, from, methodName) {
 		var old = to[methodName];
 
 		// ... we create a new function on to
-		to[methodName] = function () {
+		to[methodName] = function() {
 
 			// wherein we first call the method which exists on `to`
 			var oldReturn = old.apply(this, arguments);
@@ -108,7 +108,7 @@ Helpers.extendMethod = function (to, from, methodName) {
 /**
  * Detect transitionend event.
  */
-Helpers.transitionEndEvent = function () {
+Helpers.transitionEndEvent = function() {
 	var t;
 	var el = document.createElement('fakeelement');
 	var transitions = {
@@ -128,7 +128,7 @@ Helpers.transitionEndEvent = function () {
 /**
  * Detect animationend event.
  */
-Helpers.animationEndEvent = function () {
+Helpers.animationEndEvent = function() {
 	var t;
 	var el = document.createElement('fakeelement');
 	var transitions = {
@@ -148,14 +148,14 @@ Helpers.animationEndEvent = function () {
 /**
  * Touch Detection
  */
-Helpers.isTouch = function () {
+Helpers.isTouch = function() {
 	return 'ontouchstart' in window;
 };
 
 /**
  * Determine click handler.
  */
-Helpers.clickHandler = function () {
+Helpers.clickHandler = function() {
 	return Helpers.isTouch() ? 'touchstart' : 'click';
 };
 
@@ -166,7 +166,7 @@ Helpers.clickHandler = function () {
  * @param {function} callback - callback function
  * @param {string} scope - scope of function
  */
-Helpers.forEach = function (array, callback, scope) {
+Helpers.forEach = function(array, callback, scope) {
 	for (var i = 0; i < array.length; i++) {
 		callback.call(scope, i, array[i]);
 	}
@@ -183,15 +183,15 @@ Helpers.forEach = function (array, callback, scope) {
  * @param {boolean} obj.render - Optional: render the class, if false the class will only be initialized
  * @param {function} obj.cb - Optional: provide a function which will be executed after initialisation
  */
-Helpers.loadModules = function (obj) {
+Helpers.loadModule = function(obj) {
 
 	if (!obj.el) throw new Error('In order to work with loadModule you need to define an element as string!');
 	if (!obj.Module) throw new Error('In order to work with loadModule you need to define a Module!');
 
 	var moduleList = document.querySelectorAll(obj.el);
-	var renderOnInit = obj.render || true;
+	var renderOnInit = obj.render !== false;
 
-	Helpers.forEach(moduleList, function (i, el) {
+	Helpers.forEach(moduleList, (i, el) => {
 		var attrs = el.getAttribute('data-js-options');
 		var options = JSON.parse(attrs);
 
@@ -214,7 +214,7 @@ Helpers.loadModules = function (obj) {
  *
  * @param {string} url - URL to your script
  */
-Helpers.checkScript = function (url) {
+Helpers.checkScript = function(url) {
 	var x = document.getElementsByTagName("script");
 	var scriptAdded = false;
 
@@ -236,7 +236,7 @@ Helpers.checkScript = function (url) {
  * @param {fn} callbackFn - callback function
  * @param {this} callbackObj - this context
  */
-Helpers.loadScript = function (url, callbackFn, callbackObj) {
+Helpers.loadScript = function(url, callbackFn, callbackObj) {
 	var scriptAdded = Helpers.checkScript(url);
 
 	if (scriptAdded === false) {
@@ -249,12 +249,12 @@ Helpers.loadScript = function (url, callbackFn, callbackObj) {
 		if (scriptAdded === true) {
 			callbackFn.apply(callbackObj);
 		} else {
-			script.onreadystatechange = function () {
+			script.onreadystatechange = function() {
 				if (x.readyState == 'complete') {
 					callbackFn.apply(callbackObj);
 				}
 			};
-			script.onload = function () {
+			script.onload = function() {
 				callbackFn.apply(callbackObj);
 			};
 		}
@@ -268,30 +268,30 @@ Helpers.loadScript = function (url, callbackFn, callbackObj) {
  *
  * @param {string} regEx - Regular Expression
  */
-Helpers.regExp = function (regEx) {
+Helpers.regExp = function(regEx) {
 	return new RegExp("(^|\\s+)" + regEx + "(\\s+|$)");
 };
 
 if ('classList' in document.documentElement) {
-	Helpers.hasClass = function (elem, c) {
+	Helpers.hasClass = function(elem, c) {
 		return elem.classList.contains(c);
 	};
-	Helpers.addClass = function (elem, c) {
+	Helpers.addClass = function(elem, c) {
 		elem.classList.add(c);
 	};
-	Helpers.removeClass = function (elem, c) {
+	Helpers.removeClass = function(elem, c) {
 		elem.classList.remove(c);
 	};
 } else {
-	Helpers.hasClass = function (elem, c) {
+	Helpers.hasClass = function(elem, c) {
 		return Helpers.regExp(c).test(elem.className);
 	};
-	Helpers.addClass = function (elem, c) {
+	Helpers.addClass = function(elem, c) {
 		if (!hasClass(elem, c)) {
 			elem.className = elem.className + ' ' + c;
 		}
 	};
-	Helpers.removeClass = function (elem, c) {
+	Helpers.removeClass = function(elem, c) {
 		elem.className = elem.className.replace(Helpers.regExp(c), ' ');
 	};
 }
@@ -312,7 +312,7 @@ Helpers.classHandler = {
  * @param {string} paramName - parameter name
  * @param {string} paramValue - parameter value
  */
-Helpers.addParamToUrl = function (url, paramName, paramValue) {
+Helpers.addParamToUrl = function(url, paramName, paramValue) {
 	var urlParts = url.split('?');
 	var i = 0;
 	var baseUrl;
@@ -339,7 +339,7 @@ Helpers.addParamToUrl = function (url, paramName, paramValue) {
 /**
  * based on https://github.com/inuyaksa/jquery.nicescroll/blob/master/jquery.nicescroll.js
  */
-Helpers.hasParent = function (e, p) {
+Helpers.hasParent = function(e, p) {
 	if (!e) return false;
 	var el = e.target || e.srcElement || e || false;
 	while (el && el != p) {
@@ -355,7 +355,7 @@ Helpers.hasParent = function (e, p) {
  * @param {obj} el - Element, which will be checked
  * @param {obj} context - Context element, in which our element could persists
  */
-Helpers.checkElementInContext = function (el, context) {
+Helpers.checkElementInContext = function(el, context) {
 	var state = el.closest(context).length === 1;
 
 	return state;
@@ -367,7 +367,7 @@ Helpers.checkElementInContext = function (el, context) {
  * @param {obj} obj1 - Object, which we want to check
  * @param {obj} obj2 - Element, which we want to check against equality
  */
-Helpers.checkNodeEquality = function (obj1, obj2) {
+Helpers.checkNodeEquality = function(obj1, obj2) {
 	return (obj1 === obj2);
 };
 
@@ -378,7 +378,7 @@ Helpers.checkNodeEquality = function (obj1, obj2) {
  * @param {obj} el - Object, which we want to check
  * @param {boolean} useBounds - if true, whole element must be visible
  */
-Helpers.isInViewport = function (el, useBounds) {
+Helpers.isInViewport = function(el, useBounds) {
 	var el = el[0];
 	var top = el.offsetTop;
 	var left = el.offsetLeft;
@@ -401,4 +401,23 @@ Helpers.isInViewport = function (el, useBounds) {
 	return cond;
 };
 
-module.exports = Helpers;
+/**
+ * Calculates the outer height for the given DOM element, including the
+ * contributions of margin.
+ *
+ * @param el - the element of which to calculate the outer height
+ * @param outer - add padding to height calculation
+ */
+Helpers.getOuterHeight = function(el, outer) {
+	var height = el[0].offsetHeight;
+
+	if (outer) {
+
+		var style = getComputedStyle(el[0]);
+
+		height += parseInt(style.paddingTop) + parseInt(style.paddingBottom);
+	}
+	return height;
+};
+
+export default Helpers;

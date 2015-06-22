@@ -4,8 +4,8 @@
  * @author Sebastian Fitzner
  */
 
-var Helpers = require('../../utils/helpers');
-var App = require('../../app');
+import Helpers from '../../utils/helpers';
+import App from '../../app';
 var $ = App.$;
 
 
@@ -150,4 +150,4 @@ Sticky.prototype._removeFixed = function() {
 };
 
 // Returns the constructor
-module.exports = Sticky;
+export default Sticky;
