@@ -175,27 +175,29 @@ Helpers.forEach = function(array, callback, scope) {
 /**
  * Initialize a module and render it and/or provide a callback function
  *
- * TODO: context handling
- *
  * @param {obj} obj - Definition of our module
  * @param {string} obj.el - Required: element
  * @param {obj} obj.Module - Required: class which will be used to render your module
  * @param {boolean} obj.render - Optional: render the class, if false the class will only be initialized
  * @param {function} obj.cb - Optional: provide a function which will be executed after initialisation
+ * @param {obj} obj.context - Optional: context of module
+ *
  */
 Helpers.loadModule = function(obj) {
-
 	if (!obj.el) throw new Error('In order to work with loadModule you need to define an element as string!');
 	if (!obj.Module) throw new Error('In order to work with loadModule you need to define a Module!');
 
-	var moduleList = document.querySelectorAll(obj.el);
-	var renderOnInit = obj.render !== false;
+	let moduleList = Helpers.querySelectorArray({
+		el: obj.el,
+		context: obj.context
+	});
+	let renderOnInit = obj.render !== false;
 
 	Helpers.forEach(moduleList, (i, el) => {
-		var attrs = el.getAttribute('data-js-options');
-		var options = JSON.parse(attrs);
+		let attrs = el.getAttribute('data-js-options');
+		let options = JSON.parse(attrs);
 
-		var module = new obj.Module({
+		let module = new obj.Module({
 			el: el,
 			options: options
 		});
@@ -207,6 +209,23 @@ Helpers.loadModule = function(obj) {
 	});
 };
 
+/**
+ * Get dom elements in an array
+ *
+ * @param {obj} obj - Selector and context
+ * @param {obj.el} obj - Required: selector
+ * @param {obj.context} obj - Optional: context
+ *
+ * @return array
+ */
+Helpers.querySelectorArray = function(obj) {
+	if (!obj.el) throw new Error('In order to work with querySelectorAll you need to define an element as string!');
+	
+	let el = obj.el;
+	let context = (obj.context) || document;
+
+	return Array.prototype.slice.call((context).querySelectorAll(el));
+};
 
 /**
  * Check if script is already added,
