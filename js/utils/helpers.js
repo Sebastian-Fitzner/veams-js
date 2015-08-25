@@ -287,7 +287,7 @@ if ('classList' in document.documentElement) {
 		return Helpers.regExp(c).test(elem.className);
 	};
 	Helpers.addClass = function(elem, c) {
-		if (!hasClass(elem, c)) {
+		if (!Helpers.hasClass(elem, c)) {
 			elem.className = elem.className + ' ' + c;
 		}
 	};
@@ -295,16 +295,6 @@ if ('classList' in document.documentElement) {
 		elem.className = elem.className.replace(Helpers.regExp(c), ' ');
 	};
 }
-
-/**
- * Simplify class handling
- */
-Helpers.classHandler = {
-	has: Helpers.hasClass,
-	add: Helpers.addClass,
-	remove: Helpers.removeClass,
-	toggle: Helpers.toggleClass
-};
 
 /**
  * Add/Update paramters for given url

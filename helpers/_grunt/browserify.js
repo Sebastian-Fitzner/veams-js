@@ -2,7 +2,7 @@ var libs = [
 	'jquery',
 	'exoskeleton',
 	// 'backbone',
-	// 'underscore',
+	'underscore',
 	// 'backbone.touch',
 	'respimage',
 	'touchswipe',
@@ -22,7 +22,9 @@ module.exports = {
 		options: {
 			debug: false,
 			alias: libs,
-			external: null  // Reset this here because it's not needed
+			external: [
+				'underscore'
+			]  // Reset this here because it's not needed
 		}
 	},
 	dev: {

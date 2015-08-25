@@ -1,0 +1,14 @@
+{
+	"slider": {
+		"options": {
+			"sliderModifierClass": "default",
+			"sliderClasses": "is-bg-blue",
+			"sliderOptions": [
+				{
+					"sliderKey": "",
+					"sliderValue": ""
+				}
+			]
+		}
+	}
+}

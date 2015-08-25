@@ -1,6 +1,6 @@
-## PG-JS Starter Kit
+## Veams-JS Starter Kit
 
-PG-JS Starter Kit contains a simple setup for a general JavaScript workflow. 
+Veams-JS Starter Kit contains a simple setup for a general JavaScript workflow. 
 
 It consists of two basic approaches:
 
@@ -44,7 +44,7 @@ If you want to install it with Bower, here are the requirements:
 ### Installation
 
 ``` bash
-bower install pg-js --save
+bower install veams-js --save
 ```
 
 ### How to use
@@ -61,10 +61,10 @@ All files in the `modules` folder are optional and work in progress. Keep that i
 
 ### Modules
 
-Each web component has its own `init` file (in version 2.0.0 there will be a helper function). 
+Each web component has its own `init` file (in version 3.0.0 there will be a helper function). 
 You can also require the files you need and init the modules in your `main.js`.
 
-Furthermore there are `scss` and `hbs` files for each module, which you can use in your project. 
+Furthermore there are `scss` and `hbs` files for some modules, which you can use in your project. 
 
 #### Handlebars Files
 
