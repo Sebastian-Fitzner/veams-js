@@ -105,48 +105,4 @@ document.addEventListener("DOMContentLoaded", function() {
 			core.render(itemContext);
 		});
 	});
-
-});
-
-	console.log('App initialized with version: ', App.version);
-
-	/**
-	 * Init Buttons
-	 */
-	Helpers.loadModule({
-		el: '[data-js-module="button"]',
-		Module: ButtonInit
-	});
-
-	/**
-	 * Init Toggle
-	 */
-	Helpers.loadModule({
-		el: '[data-js-module="toggle"]',
-		Module: Toggle
-	});
-
-	/**
-	 * Init Forms
-	 */
-	Helpers.loadModule({
-		el: '[data-js-module~="form"]',
-		Module: Form
-	});
-
-	/**
-	 * Init Equal Rows
-	 */
-	Helpers.loadModule({
-		el: '[data-js-module~="equal"]',
-		Module: EqualRows,
-		render: false,
-		cb: function(module, options) {
-			if (options && options.delayInit) {
-				$(window).load(function() {
-					module._reinit(module);
-				});
-			}
-		}
-	});
 });
