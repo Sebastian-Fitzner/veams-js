@@ -89,9 +89,9 @@ var Toggle = App.ComponentView.extend({
 
 		this.listenTo(App.Vent, 'toggle:toggleContent', this.toggleContent);
 		this.listenTo(App.Vent, 'toggle:showNextContent', this.showNextContent);
-		this.listenTo(App.Vent, 'resize', setTimeout(function() {
+		this.listenTo(App.Vent, 'resize', Helpers.throttle(() => {
 			that._computeElHeight();
-		}, 300));
+		}));
 	},
 
 	showNextContent: function(obj) {

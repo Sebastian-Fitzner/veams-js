@@ -183,7 +183,7 @@ var SelectFx = App.ComponentView.extend({
 			// remove focus class if any..
 			this._removeFocus();
 			// add class focus - track which option we are navigating
-			Helpers.classHandler.add(this.selOpts[this.preSelCurrent], 'is-focus');
+			Helpers.addClass(this.selOpts[this.preSelCurrent], 'is-focus');
 		}
 	},
 
@@ -196,13 +196,13 @@ var SelectFx = App.ComponentView.extend({
 				// update placeholder text
 				this.selPlaceholder.textContent = this.selOpts[this.current].textContent;
 			}
-			Helpers.classHandler.remove(this.selEl, 'is-active');
+			Helpers.removeClass(this.selEl, 'is-active');
 		} else {
 			if (this.hasDefaultPlaceholder && this.options.stickyPlaceholder) {
 				// everytime we open we wanna see the default placeholder text
 				this.selPlaceholder.textContent = this.selectedOpt.textContent;
 			}
-			Helpers.classHandler.add(this.selEl, 'is-active');
+			Helpers.addClass(this.selEl, 'is-active');
 		}
 	},
 
@@ -225,9 +225,10 @@ var SelectFx = App.ComponentView.extend({
 		// remove class cs-selected from old selected option and add it to current selected option
 		var oldOpt = this.selEl.querySelector('li.is-selected');
 		if (oldOpt) {
-			Helpers.classHandler.remove(oldOpt, 'is-selected');
+			Helpers.removeClass(oldOpt, 'is-selected');
 		}
-		Helpers.classHandler.add(opt, 'is-selected');
+		Helpers.addClass(opt, 'is-selected');
+		App.Vent.trigger('select:changed', this.el);
 
 		// if there´s a link defined
 		if (opt.getAttribute('data-link')) {
@@ -243,12 +244,12 @@ var SelectFx = App.ComponentView.extend({
 		this.options.onChange(this.el.value);
 	},
 	_isOpen: function (opt) {
-		return Helpers.classHandler.has(this.selEl, 'is-active');
+		return Helpers.hasClass(this.selEl, 'is-active');
 	},
 	_removeFocus: function (opt) {
 		var focusEl = this.selEl.querySelector('li.is-focus')
 		if (focusEl) {
-			Helpers.classHandler.remove(focusEl, 'is-focus');
+			Helpers.removeClass(focusEl, 'is-focus');
 		}
 	}
 });

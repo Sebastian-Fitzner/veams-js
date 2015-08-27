@@ -1,10 +1,14 @@
 import Helpers from './utils/helpers';
 var $ = require('jquery');
-var Exo = require('exoskeleton');
+var Exoskeleton = require('exoskeleton');
 // require('backbone.touch');
 
 export default (function () {
 	'use strict';
+
+	// ----------------------------------
+	// GLOBAL NAMESPACE
+	// ----------------------------------
 
 	// Save a reference to the global object
 	var root = window;
@@ -29,12 +33,20 @@ export default (function () {
 	App.ComponentView = function (options) {
 		Exoskeleton.View.call(this, options);
 	};
+	App.ComponentModel = function (options) {
+		Exoskeleton.Model.call(this, options);
+	};
+	App.ComponentCollection = function (options) {
+		Exoskeleton.Collection.call(this, options);
+	};
 
-	Helpers.extend(App.ComponentView.prototype, Exoskeleton.View.prototype, {
-		// base functions will be implemented here
-	});
+	Helpers.extend(App.ComponentView.prototype, Exoskeleton.View.prototype, {});
+	Helpers.extend(App.ComponentModel.prototype, Exoskeleton.Model.prototype, {});
+	Helpers.extend(App.ComponentCollection.prototype, Exoskeleton.Collection.prototype, {});
 
 	App.ComponentView.extend = Exoskeleton.View.extend;
+	App.ComponentModel.extend = Exoskeleton.Model.extend;
+	App.ComponentCollection.extend = Exoskeleton.Collection.extend;
 	/**
 	 * Add our Mixin to our Exoskeleton.View object.
 	 */
@@ -48,22 +60,42 @@ export default (function () {
 	// Versioning
 	App.version = "0.1.0";
 
+	// ----------------------------------
+	// CHECKING
+	// ----------------------------------
+
 	// Media Query
 	var head = document.querySelectorAll('head');
 	App.currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
 
-	// devmode logging
-	if (document.location.search.indexOf('devmode') < 0 && document.querySelectorAll('html')[0].className.indexOf('ie9') < 0) {
-		// hide all warnings and logs if not in devmode
-		console.log = function () {
-		};
-		console.warn = function () {
-		};
-	} else {
-		App.devmode = true;
+	// disable devmode logging if not on ie9 and parameter "devmode" not present
+	if (document.querySelectorAll('html')[0].className.indexOf('ie9') < 0) {
+		if (document.location.search.indexOf('devmode') < 0) {
+			// hide all warnings and logs if not in devmode
+			console.log = console.warn = function () {
+			};
+		} else {
+			App.devmode = true;
+		}
+	}
+	else {
+		// IE9 FIX: in ie9 window.console seems to be undefined until you open dev tools
+		if (!window.console) {
+			window.console = {};
+			console.log = console.warn = function () {
+			};
+		}
 	}
 
-	// Trigger global resize event
+	// ----------------------------------
+	// GLOBAL EVENTS
+	// ----------------------------------
+
+	/**
+	 * Triggers
+	 */
+
+	// Resize event
 	window.onresize = function (e) {
 		var currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
 
@@ -83,9 +115,22 @@ export default (function () {
 		App.Vent.trigger('resize', e);
 	};
 
+	// Scroll event
 	document.onscroll = function (e) {
 		App.Vent.trigger('scroll', e);
 	};
+
+	/**
+	 * Listeners
+	 */
+
+	// Redirect
+	App.Vent.on('dom:redirect', (obj) => {
+		if (!obj && !obj.url) throw new Error('Object is not defined. Please provide an url in your object!');
+
+		// Redirect to page
+		window.location.href = String(obj.url);
+	});
 
 	return App;
 
