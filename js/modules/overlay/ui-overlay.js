@@ -3,7 +3,7 @@ var App = require('../../app');
 var $ = App.$;
 var Handlebars = require('handlebars/runtime')['default'];
 var Template = require('../../templates/templates')(Handlebars);
-require('../../utils/xif-helper');
+require('../../utils/template-helpers/xif-helper');
 
 App.ui.Overlay = App.ComponentView.extend({
 	// Set standard options
@@ -37,7 +37,7 @@ App.ui.Overlay = App.ComponentView.extend({
 	bindEvents: function() {
 		var that = this;
 
-		that.listenTo(App.Vent, 'resize', setTimeout(function() {
+		that.listenTo(App.Vent, App.Events.resize, setTimeout(function() {
 			that.render();
 		}), 300);
 	},

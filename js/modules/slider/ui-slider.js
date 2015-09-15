@@ -139,7 +139,7 @@ class Slider extends App.ComponentView {
 	 * Bind all events
 	 */
 	bindEvents() {
-		App.Vent.on('resize', this.render, this);
+		App.Vent.on(App.Events.resize, this.render, this);
 	}
 
 	// Renders the view's template to the UI

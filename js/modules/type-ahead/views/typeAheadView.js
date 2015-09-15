@@ -50,7 +50,7 @@ var typeAheadView = App.ComponentView.extend({
 
 	bindEvents: function () {
 		App.Vent.on('type-ahead:search', this.search, this);
-		App.Vent.on('resize', this.calculateWidthAndPos, this);
+		App.Vent.on(App.Events.resize, this.calculateWidthAndPos, this);
 	},
 
 	fetchData: function () {

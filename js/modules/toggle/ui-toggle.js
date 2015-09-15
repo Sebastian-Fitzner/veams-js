@@ -1,172 +1,122 @@
-/**
- * @module toggle
- *
- * @author Sebastian Fitzner
- */
-
 import Helpers from '../../utils/helpers';
 import App from '../../app';
+import AppModule from '../_global/moduleView';
+
 var $ = App.$;
-import ImageLoader from '../../utils/mixins/imageLoader';
 
-var Toggle = App.ComponentView.extend({
-	options: {
-		open: false, // array: viewport names - eg.: ['mobile', 'tablet', 'desktop-small', 'desktop']
-		activeClass: 'is-visible',
-		useMaxHeight: App.support.touch ? 10000 : false, // number => 10000
-		singleOpen: false,
-		togglePush: false, // data-js-ref="toggle-push"
-		index: false // number: index of toggle in context, used in showNext mode
-	},
-	// View constructor
-	initialize: function(obj) {
-		this.options = Helpers.defaults(obj.options || {}, this.options);
-		this.elId = this.$el.attr('id');
-		this.heightProp = this.options.useMaxHeight !== false ? 'max-height' : 'height';
-
-		if (this.options.togglePush) {
-			this.pushEl = this.$el.closest('[data-js-ref="toggle-push"]');
-
-			if (!this.pushEl.length) {
-				this.pushEl = this.$el.parent();
-			}
-		}
-
-		this._bindEvents();
-	},
-
-	_computeElHeight: function() {
-		if (!this.options.useMaxHeight) {
-			this.elClone = this._cloneIt();
-
-			clearTimeout(this.timeout);
-
-			this.timeout = setTimeout(() => {
-				this.elHeight = this.elClone.outerHeight(true);
-				this.elClone.remove();
-				this.$el.removeAttr('data-cloned');
-
-				if (this.$el.is('.' + this.options.activeClass)) {
-					this.$el.css('height', this.elHeight);
-				}
-			}, 0);
-
-		} else {
-			this.elHeight = this.options.useMaxHeight;
-		}
-	},
-
-	_cloneIt: function() {
-		var width = this.$el.outerWidth(true);
-		var styles = {
-			position: 'absolute',
-			display: 'block',
-			left: -9999,
-			width: width,
-			height: 'auto'
+class Toggle extends AppModule {
+	constructor(obj) {
+		let options = {
+			open: false, // array: viewport names - eg.: ['mobile', 'tablet', 'desktop-small', 'desktop']
+			activeClass: 'is-visible',
+			dataMaxAttr: 'data-js-max-height',
+			removeStyles: true,
+			singleOpen: false
 		};
 
-		return this.$el.attr('data-cloned', true).clone().css(styles).appendTo(document.body);
-	},
-
-	_checkOpening: function() {
-		var falsy = false;
-		this.options.open.forEach(function(el) {
-			if (el === App.currentMedia) {
-				falsy = true;
-			}
-		});
-
-		if (this.options.open === 'true' || falsy !== false) {
-			this.openElement();
-		} else {
-			this.closeElement();
-		}
-	},
-
-	_bindEvents: function() {
-		var that = this;
-
-		this.listenTo(App.Vent, 'toggle:toggleContent', this.toggleContent);
-		this.listenTo(App.Vent, 'toggle:showNextContent', this.showNextContent);
-		this.listenTo(App.Vent, 'resize', Helpers.throttle(() => {
-			that._computeElHeight();
-		}));
-	},
-
-	showNextContent: function(obj) {
-		var context = obj.options.context;
-
-		if (Helpers.checkElementInContext(this.$el, context)) {
-			if (obj.options.showNextIndex === this.options.index) {
-				this.openElement();
-
-				if (this.$el.is(':last-of-type')) {
-					obj.el.trigger('toggle:lastopened');
-				}
-			}
-		}
-	},
-
-	toggleContent: function(obj) {
-		var toggleId = obj.options.id;
-		var context = obj.options.context;
-		var toggleAll = obj.options.toggleAll === 'true';
-
-
-		if (Helpers.checkElementInContext(this.$el, context)) {
-			if (toggleAll) {
-				obj.el.is('.' + obj.options.activeClass) ? this.closeElement() : this.openElement();
-			} else {
-				if (this.options.singleOpen === 'true') {
-					if (this._checkId(toggleId)) {
-						this.$el.is('.' + this.options.activeClass) ? this.closeElement() : this.openElement();
-					} else {
-						this.closeElement();
-					}
-				} else {
-					if (this._checkId(toggleId)) {
-						this.$el.is('.' + this.options.activeClass) ? this.closeElement() : this.openElement();
-					}
-				}
-			}
-		}
-	},
-
-	_checkId: function(id) {
-		if (this.elId === id) return true;
-	},
-
-	openElement: function() {
-		if (this.options.togglePush) {
-			this.pushEl.css('padding-bottom', this.elHeight);
-		}
-
-		this.$el.addClass(this.options.activeClass).css(this.heightProp, this.elHeight);
-	},
-
-	closeElement: function() {
-		this.$el.removeClass(this.options.activeClass).css(this.heightProp, 0);
-
-		if (this.options.togglePush) {
-			this.pushEl.css('padding-bottom', 0);
-		}
-	},
-
-	// Renders the view's template to the UI
-	render: function() {
-		this._computeElHeight();
-		this.$el.removeClass('is-unresolved').css(this.heightProp, 0);
-		if (this.options.open) this._checkOpening();
-
-		// Maintains chainability
-		return this;
+		super(obj, options);
 	}
-});
+
+	get _height() {
+		let element = this.el;
+		let elStyle = window.getComputedStyle(element);
+		let elDisplay = elStyle.display;
+		let elPosition = elStyle.position;
+		let elVisibility = elStyle.visibility;
+		let elMaxHeight = elStyle.maxHeight.replace('px', '').replace('%', '');
+		let wantedHeight = 0;
 
 
-/** Use mixin to extend our view with `ImageLoader` */
-Toggle.mixin(ImageLoader);
+		// the element is hidden so:
+		// making the el block so we can meassure its height but still be hidden
+		element.style.position = 'absolute';
+		element.style.visibility = 'hidden';
+		element.style.display = 'block';
 
-// Returns the View class
+		wantedHeight = element.offsetHeight;
+
+		// reverting to the original values
+		element.style.display = elDisplay;
+		element.style.position = elPosition;
+		element.style.visibility = elVisibility;
+
+		return wantedHeight;
+	}
+
+	initialize() {
+		this.elId = this.$el.attr('id');
+
+		// call super
+		super.initialize();
+	}
+
+	/**
+	 * Bind all evente
+	 */
+	bindEvents() {
+		App.Vent.on(App.Events.toggleContent, this.toggleContent.bind(this));
+		App.Vent.on(App.Events.resize, Helpers.throttle(() => {
+			this.$el.removeAttr(this.options.dataMaxAttr).removeAttr('style').removeClass(this.options.activeClass);
+			this.toggleSlide();
+		}, 300));
+
+	}
+
+	toggleContent(obj) {
+		let toggleId = obj.options.id;
+		let context = obj.options.context;
+
+		if (this.options.singleOpen === 'true' && Helpers.checkElementInContext(this.$el, context)) {
+			this.toggleSlide();
+		} else {
+			if (this._checkId(toggleId)) {
+				this.toggleSlide();
+			}
+		}
+	}
+
+	/**
+	 * toggleSlide mimics the jQuery version of slideDown and slideUp
+	 * all in one function comparing the max-heigth to 0
+	 */
+	toggleSlide(el) {
+		let element = el || this.el;
+		let elMaxHeight = 0;
+
+		if (element.getAttribute(this.options.dataMaxAttr)) {
+			// we've already used this before, so everything is setup
+			if (element.style.maxHeight.replace('px', '').replace('%', '') === '0') {
+				element.style.maxHeight = element.getAttribute(this.options.dataMaxAttr);
+			} else {
+				element.style.maxHeight = '0';
+			}
+		} else {
+			elMaxHeight = this._height + 'px';
+			element.style.overflowY = 'hidden';
+			element.style.maxHeight = '0';
+			element.setAttribute(this.options.dataMaxAttr, elMaxHeight);
+			element.style.display = 'block';
+
+			// we use setTimeout to modify maxHeight later than display (to we have the transition effect)
+			setTimeout(function() {
+				element.style.maxHeight = elMaxHeight;
+			}, 10);
+		}
+
+		this.$el.toggleClass(this.options.activeClass);
+	}
+
+	_checkId(id) {
+		if (this.elId === id) return true;
+	}
+
+	render() {
+		if (this.options.open === 'true') {
+			this.$el.removeClass('is-unresolved');
+			this.toggleSlide();
+		}
+	}
+}
+
+// Returns constructor
 export default Toggle;

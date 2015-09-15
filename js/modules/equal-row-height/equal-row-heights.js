@@ -27,7 +27,7 @@ var EqualHeight = App.ComponentView.extend({
 	_bindEvents: function () {
 		var timer;
 
-		App.Vent.on('resize', () => {
+		App.Vent.on(App.Events.resize, () => {
 			this._reinit(this, timer);
 		});
 	},
@@ -114,7 +114,7 @@ var EqualHeight = App.ComponentView.extend({
 		this.buildRow(listEl);
 
 		setTimeout(() => {
-			App.Vent.trigger('equal:render', {
+			App.Vent.trigger(App.Events.equalRender, {
 				el: this.$el,
 				childElements: this.options.childElements
 			});

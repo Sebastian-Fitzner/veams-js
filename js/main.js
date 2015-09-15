@@ -5,14 +5,14 @@ import Helpers from './utils/helpers';
 require('respimage');
 require('document-register-element');
 
-var $ = App.$;
+let $ = App.$;
 
 // ES6 Modules
 import ButtonInit from './modules/button/button-init';
 import Toggle from './modules/toggle/ui-toggle';
 import EqualRows from './modules/equal-row-height/equal-row-heights';
 import Form from './modules/form/form';
-import Form from './modules/form/form-ajax';
+import FormAjax from './modules/form/form-ajax';
 
 "use strict";
 
@@ -48,6 +48,8 @@ class Core {
 			Module: ButtonInit,
 			context: context
 		});
+
+		Helpers.loadModule({});
 
 		/**
 		 * Init Toggle
@@ -85,9 +87,9 @@ class Core {
 			el: '[data-js-module~="equal"]',
 			Module: EqualRows,
 			render: false,
-			cb: function (module, options) {
+			cb: function(module, options) {
 				if (options && options.delayInit) {
-					$(window).load(function () {
+					$(window).load(function() {
 						module._reinit(module);
 					});
 				}
@@ -97,8 +99,7 @@ class Core {
 	}
 }
 
-
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
 	var core = new Core();
 
 	/**
@@ -110,12 +111,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	 * Initialize modules which are loaded after initial load
 	 * via custom event 'DOMchanged'
 	 */
-	App.Vent.on('DOMchanged', (context) => {
-		Helpers.querySelectorArray({
-			el: context
-		}).forEach((itemContext) => {
-				console.log('Dom has changed. Initialising new modules in: ', itemContext);
-				core.render(itemContext);
-			});
+	App.Vent.on(App.Events.DOMchanged, (context) => {
+		Helpers.querySelectorArray(context).forEach((itemContext) => {
+			console.log('Dom has changed. Initialising new modules in: ', itemContext);
+			core.render(itemContext);
+		});
 	});
 });

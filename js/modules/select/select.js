@@ -228,7 +228,7 @@ var SelectFx = App.ComponentView.extend({
 			Helpers.removeClass(oldOpt, 'is-selected');
 		}
 		Helpers.addClass(opt, 'is-selected');
-		App.Vent.trigger('select:changed', this.el);
+		App.Vent.trigger(App.Events.selectChanged, this.el);
 
 		// if there´s a link defined
 		if (opt.getAttribute('data-link')) {

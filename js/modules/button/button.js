@@ -52,8 +52,8 @@ class ButtonView extends App.ComponentView {
 	 * Listen to open and close events
 	 */
 	bindEvents() {
-		this.listenTo(App.Vent, 'button:close', this.close);
-		this.listenTo(App.Vent, 'button:open', this.open);
+		this.listenTo(App.Vent, App.Events.btnClose, this.close);
+		this.listenTo(App.Vent, App.Events.btnOpen, this.open);
 	}
 
 	// Renders the view's template to the UI
@@ -68,9 +68,9 @@ class ButtonView extends App.ComponentView {
 	 * Trigger events so that each button can listen to that and react by option singleOpen
 	 */
 	handleClasses() {
-		this.$el.is('.' + this.options.activeClass) ? App.Vent.trigger('button:close', {
+		this.$el.is('.' + this.options.activeClass) ? App.Vent.trigger(App.Events.btnClose, {
 			'el': this.$el
-		}) : App.Vent.trigger('button:open', {
+		}) : App.Vent.trigger(App.Events.btnOpen, {
 			'el': this.$el
 		});
 	}

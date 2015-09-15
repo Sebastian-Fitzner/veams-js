@@ -22,19 +22,16 @@ var Helpers = {};
  * @param {Object} obj - Definition of our module
  * @param {string} obj.el - Required: element
  * @param {Object} obj.Module - Required: class which will be used to render your module
- * @param {boolean} obj.render - Optional: render the class, if false the class will only be initialized
- * @param {function} obj.cb - Optional: provide a function which will be executed after initialisation
- * @param {Object} obj.context - Optional: context of module
+ * @param {boolean} [obj.render=true] - Optional: render the class, if false the class will only be initialized
+ * @param {function} [obj.cb] - Optional: provide a function which will be executed after initialisation
+ * @param {Object} [obj.context] - Optional: context of module
  *
  */
 Helpers.loadModule = function (obj) {
 	if (!obj.el) throw new Error('In order to work with loadModule you need to define an element as string!');
 	if (!obj.Module) throw new Error('In order to work with loadModule you need to define a Module!');
 
-	var moduleList = Helpers.querySelectorArray({
-		el: obj.el,
-		context: obj.context
-	});
+	var moduleList = Helpers.querySelectorArray(obj.el, obj.context);
 	var renderOnInit = obj.render !== false;
 
 	Helpers.forEach(moduleList, (i, el) => {
@@ -148,18 +145,17 @@ Helpers.extendMethod = function (to, from, methodName) {
 /**
  * Get dom elements in an array
  *
- * @param {Object} obj - Selector and context
- * @param {Object} obj.el - Required: selector
- * @param {Object} obj.context - Optional: context
+ * @param {String} el - Required: selector
+ * @param {Object} [context] - Optional: context
  *
  * @return {Array}
  */
-Helpers.querySelectorArray = function (obj) {
-	if (!obj.el) throw new Error('In order to work with querySelectorAll you need to define an element as string!');
-	var el = obj.el;
-	var context = (obj.context) || document;
+Helpers.querySelectorArray = function (el , context) {
+	if (!el) throw new Error('In order to work with querySelectorAll you need to define an element as string!');
+	var element = el;
+	var customContext = context || document;
 
-	return Array.prototype.slice.call((context).querySelectorAll(el));
+	return Array.prototype.slice.call((customContext).querySelectorAll(element));
 };
 
 /**

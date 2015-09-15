@@ -29,7 +29,7 @@ class SlideFox {
 	}
 
 	bindEvents() {
-		App.Vent.on('scroll', this.render.bind(this));
+		App.Vent.on(App.Events.scroll, this.render.bind(this));
 	}
 
 	showSlideFox() {
