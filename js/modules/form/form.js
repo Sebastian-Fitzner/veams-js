@@ -13,7 +13,6 @@ class Form extends AppModule {
 	}
 
 	initialize() {
-		this.form = this.$el.find('form');
 	}
 
 	render() {

@@ -29,7 +29,7 @@ var Helpers = {};
  */
 Helpers.loadModule = function (obj) {
 	if (!obj.el) throw new Error('In order to work with loadModule you need to define an element as string!');
-	if (!obj.Module) throw new Error('In order to work with loadModule you need to define a Module!');
+	if (!obj.module) throw new Error('In order to work with loadModule you need to define a Module!');
 
 	var moduleList = Helpers.querySelectorArray(obj.el, obj.context);
 	var renderOnInit = obj.render !== false;
@@ -38,7 +38,7 @@ Helpers.loadModule = function (obj) {
 		var attrs = el.getAttribute('data-js-options');
 		var options = JSON.parse(attrs);
 
-		var module = new obj.Module({
+		var module = new obj.module({
 			el: el,
 			options: options
 		});

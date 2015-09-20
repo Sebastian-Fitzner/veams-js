@@ -17,8 +17,7 @@ class FormAjax extends AppModule {
 			submitOnLoad: false,
 			submitOnChange: true,
 			showLoader: false, // loading class
-			eventName: App.Events.formComplete,
-			resetBtn: '[data-js-atom="form-reset"]'
+			eventName: App.Events.formComplete
 		};
 
 		super(obj, options);
@@ -28,13 +27,9 @@ class FormAjax extends AppModule {
 		// save some references
 		this.fields = $('input', this.$el);
 		this.selects = $('select', this.$el);
-		this.resetBtn = this.$el.find(this.options.resetBtn);
 
 		// Fetch data if option is true
 		if (this.options.submitOnLoad) this.fetchData(this.$el);
-
-		// hide reset button
-		this.hideResetBtn();
 
 		// call super
 		super.initialize();
@@ -44,27 +39,15 @@ class FormAjax extends AppModule {
 	 * Bind all evente
 	 */
 	bindEvents() {
-
-		/**
-		 * Reset all filters by click on reset btn
-		 *
-		 * reset filters
-		 * hide button
-		 * fetch data
-		 * trigger event for other modules
-		 */
-		this.resetBtn.on('click', () => {
-			this.resetFilters();
-			this.hideResetBtn();
-			this.fetchData(this.$el);
-
-			App.Vent.trigger(App.Events.formReset);
-		});
-
 		/**
 		 * On submit event fetch data
 		 */
 		this.$el.on('submit reset', this.fetchData.bind(this));
+
+		/**
+		 * Reset filters on reset event
+		 */
+		App.Vent.on(App.Events.formReset, this.resetFilters.bind(this));
 
 		/**
 		 * If submitOnChange is true
@@ -76,11 +59,9 @@ class FormAjax extends AppModule {
 		if (this.options.submitOnChange) {
 			this.$el.on('blur change', this.fields, (e) => {
 				this.fetchData(e);
-				this.showResetBtn();
 			});
 			App.Vent.on(App.Events.selectChanged, (e) => {
 				this.fetchData(e);
-				this.showResetBtn();
 			});
 		}
 	}
@@ -138,31 +119,30 @@ class FormAjax extends AppModule {
 	}
 
 	/**
-	 * Show reset button
-	 */
-	showResetBtn() {
-		this.resetBtn.addClass('is-visible');
-	}
-
-	/**
-	 * Hidereset button
-	 */
-	hideResetBtn() {
-		this.resetBtn.removeClass('is-visible');
-	}
-
-	/**
 	 * Reset filters, currently supported
 	 *
 	 * checkboxes
 	 * selects
 	 */
 	resetFilters() {
-		this.fields.each(function() {
+		this.resetChecks();
+		this.resetSelects();
+	}
+
+	/**
+	 * Reset checkboxes
+	 */
+	resetChecks() {
+		this.fields.each(function () {
 			$(this).removeAttr('checked');
 		});
+	}
 
-		this.selects.each(function() {
+	/**
+	 * Resest selects
+	 */
+	resetSelects() {
+		this.selects.each(function () {
 			$(this).removeAttr('selected').find('option').eq(0).attr('selected', 'selected');
 		});
 	}

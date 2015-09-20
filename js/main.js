@@ -45,18 +45,16 @@ class Core {
 		 */
 		Helpers.loadModule({
 			el: '[data-js-module="button"]',
-			Module: ButtonInit,
+			module: ButtonInit,
 			context: context
 		});
-
-		Helpers.loadModule({});
-
+		
 		/**
 		 * Init Toggle
 		 */
 		Helpers.loadModule({
 			el: '[data-js-module="toggle"]',
-			Module: Toggle,
+			module: Toggle,
 			render: false,
 			context: context
 		});
@@ -66,7 +64,7 @@ class Core {
 		 */
 		Helpers.loadModule({
 			el: '[data-js-module~="form"]',
-			Module: Form,
+			module: Form,
 			context: context
 		});
 
@@ -75,7 +73,7 @@ class Core {
 		 */
 		Helpers.loadModule({
 			el: '[data-js-module~="form-ajax"]',
-			Module: FormAjax,
+			module: FormAjax,
 			render: false,
 			context: context
 		});
@@ -85,7 +83,7 @@ class Core {
 		 */
 		Helpers.loadModule({
 			el: '[data-js-module~="equal"]',
-			Module: EqualRows,
+			module: EqualRows,
 			render: false,
 			cb: function(module, options) {
 				if (options && options.delayInit) {
