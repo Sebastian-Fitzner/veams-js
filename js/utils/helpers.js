@@ -151,7 +151,7 @@ Helpers.extendMethod = function (to, from, methodName) {
  * @return {Array}
  */
 Helpers.querySelectorArray = function (el , context) {
-	if (!el) throw new Error('In order to work with querySelectorAll you need to define an element as string!');
+	if (!el) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
 	var element = el;
 	var customContext = context || document;
 
@@ -398,11 +398,9 @@ Helpers.getOuterHeight = function (el, outer) {
  */
 Helpers.templatizer = function (obj) {
 	if (!'content' in document.createElement('template')) return;
-	if (!obj && !obj.templateName) throw new Error('You need to path a template namespace as string!');
+	if (!obj && !obj.templateName) throw new Error('You need to pass a template namespace as string!');
 
-	Helpers.querySelectorArray({
-		el: obj.templateName
-	}).forEach(function (tpl) {
+	Helpers.querySelectorArray(obj.templateName).forEach(function (tpl) {
 		let parent = tpl.parentNode;
 		let content = tpl.content.children[0];
 
@@ -495,7 +493,7 @@ if ('classList' in document.documentElement) {
 		return Helpers.regExp(c).test(elem.className);
 	};
 	Helpers.addClass = function (elem, c) {
-		if (!Heloers.hasClass(elem, c)) {
+		if (!Helpers.hasClass(elem, c)) {
 			elem.className = elem.className + ' ' + c;
 		}
 	};
