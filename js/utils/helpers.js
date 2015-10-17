@@ -10,7 +10,7 @@
 /**
  * @alias module:Helper
  */
-var Helpers = {};
+let Helpers = {};
 
 // ----------------------------------
 // MODULE HELPERS
@@ -31,14 +31,14 @@ Helpers.loadModule = function (obj) {
 	if (!obj.el) throw new Error('In order to work with loadModule you need to define an element as string!');
 	if (!obj.module) throw new Error('In order to work with loadModule you need to define a Module!');
 
-	var moduleList = Helpers.querySelectorArray(obj.el, obj.context);
-	var renderOnInit = obj.render !== false;
+	let moduleList = Helpers.querySelectorArray(obj.el, obj.context);
+	let renderOnInit = obj.render !== false;
 
 	Helpers.forEach(moduleList, (i, el) => {
-		var attrs = el.getAttribute('data-js-options');
-		var options = JSON.parse(attrs);
+		let attrs = el.getAttribute('data-js-options');
+		let options = JSON.parse(attrs);
 
-		var module = new obj.module({
+		let module = new obj.module({
 			el: el,
 			options: options
 		});
@@ -63,7 +63,7 @@ Helpers.loadModule = function (obj) {
  */
 Helpers.extend = function extend(obj) {
 	[].slice.call(arguments, 1).forEach((item) => {
-		for (var key in item) obj[key] = item[key];
+		for (let key in item) obj[key] = item[key];
 	});
 	return obj;
 };
@@ -77,32 +77,35 @@ Helpers.extend = function extend(obj) {
  */
 Helpers.defaults = function defaults(obj) {
 	[].slice.call(arguments, 1).forEach((item) => {
-		for (var key in item)
-			if (obj[key] === undefined)
-				obj[key] = item[key];
+		for (let key in item) {
+			if (obj[key] === undefined) obj[key] = item[key];
+		}
 	});
 	return obj;
 };
 
 /**
- * Merge views method functions.
+ * Merge method functions.
  *
- * @param {Object} from - Mixin object which will be merged via Helpers.defaults with the methods of our view
+ * @param {Object} from - Mixin object which will be merged via Helpers.defaults with the methods of our class
+ * @param {Array} methods - Array of method names which will be extended.
  */
-Helpers.viewMixin = function (from) {
+Helpers.mixin = function (from, methods = ['initialize', 'render']) {
 
-	var to = this.prototype;
+	let to = this.prototype;
 
 	/** Add those methods which exists on `from` but not on `to` to the latter */
 	Helpers.defaults(to, from);
 
 	/** we do the same for events */
-	Helpers.defaults(to.events, from.events);
+	if (to.events) {
+		Helpers.defaults(to.events, from.events);
+	}
 
-	/** Extend `to`'s `render` */
-	Helpers.extendMethod(to, from, 'render');
-	/** Extend `to`'s `initialize` */
-	Helpers.extendMethod(to, from, 'initialize');
+	// Extend to's methods
+	methods.forEach((method) => {
+		Helpers.extendMethod(to, from, method);
+	});
 };
 
 /**
@@ -119,13 +122,13 @@ Helpers.extendMethod = function (to, from, methodName) {
 
 	// if the method is defined on from ...
 	if (!isUndefined(from[methodName])) {
-		var old = to[methodName];
+		let old = to[methodName];
 
 		// ... we create a new function on to
 		to[methodName] = function () {
 
 			// wherein we first call the method which exists on `to`
-			var oldReturn = old.apply(this, arguments);
+			let oldReturn = old.apply(this, arguments);
 
 			// and then call the method on `from`
 			from[methodName].apply(this, arguments);
@@ -133,10 +136,10 @@ Helpers.extendMethod = function (to, from, methodName) {
 			// and then return the expected result,
 			// i.e. what the method on `to` returns
 			return oldReturn;
-
 		};
 	}
 };
+
 
 // ----------------------------------
 // FUNCTIONAL HELPERS
@@ -150,10 +153,10 @@ Helpers.extendMethod = function (to, from, methodName) {
  *
  * @return {Array}
  */
-Helpers.querySelectorArray = function (el , context) {
+Helpers.querySelectorArray = function (el, context) {
 	if (!el) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
-	var element = el;
-	var customContext = context || document;
+	let element = el;
+	let customContext = context || document;
 
 	return Array.prototype.slice.call((customContext).querySelectorAll(element));
 };
@@ -166,7 +169,7 @@ Helpers.querySelectorArray = function (el , context) {
  * @param {string} scope - scope of function
  */
 Helpers.forEach = function (array, callback, scope) {
-	for (var i = 0; i < array.length; i++) {
+	for (let i = 0; i < array.length; i++) {
 		callback.call(scope, i, array[i]);
 	}
 };
@@ -179,7 +182,8 @@ Helpers.forEach = function (array, callback, scope) {
  */
 Helpers.indexOf = function (array, item) {
 	if (array == null) return -1;
-	var i, l;
+	let l;
+	let i;
 
 	for (i = 0, l = array.length; i < l; i++)
 		if (array[i] === item) return i;
@@ -190,7 +194,7 @@ Helpers.indexOf = function (array, item) {
  * Return new RegExp
  *
  * @param {string} regEx - Regular Expression
- * 
+ *
  * @return {RegExp}
  */
 Helpers.regExp = function (regEx) {
@@ -206,7 +210,7 @@ Helpers.regExp = function (regEx) {
  */
 
 Helpers.throttle = function (func, wait, immediate) {
-	var timeout;
+	let timeout;
 
 	return function () {
 		let context = this;
@@ -240,9 +244,9 @@ Helpers.isTouch = function () {
  * Detect transitionend event.
  */
 Helpers.transitionEndEvent = function () {
-	var t;
-	var el = document.createElement('fakeelement');
-	var transitions = {
+	let t;
+	let el = document.createElement('fakeelement');
+	let transitions = {
 		'transition': 'transitionend',
 		'OTransition': 'oTransitionEnd',
 		'MozTransition': 'transitionend',
@@ -260,18 +264,18 @@ Helpers.transitionEndEvent = function () {
  * Detect animationend event.
  */
 Helpers.animationEndEvent = function () {
-	var t;
-	var el = document.createElement('fakeelement');
-	var transitions = {
+	let t;
+	let el = document.createElement('fakeelement');
+	let animations = {
 		'animation': 'animationend',
 		'OAnimation': 'oAnimationEnd',
 		'MozAnimation': 'animationend',
 		'WebkitAnimation': 'webkitAnimationEnd'
 	};
 
-	for (t in transitions) {
+	for (t in animations) {
 		if (el.style[t] !== undefined) {
-			return transitions[t];
+			return animations[t];
 		}
 	}
 };
@@ -301,7 +305,7 @@ Helpers.requestAniFrame = function () {
  */
 Helpers.hasParent = function (e, p) {
 	if (!e) return false;
-	var el = e.target || e.srcElement || e || false;
+	let el = e.target || e.srcElement || e || false;
 	while (el && el != p) {
 		el = el.parentNode || false;
 	}
@@ -318,9 +322,7 @@ Helpers.hasParent = function (e, p) {
  * @return {boolean}
  */
 Helpers.checkElementInContext = function (el, context) {
-	var state = el.closest(context).length === 1;
-
-	return state;
+	return el.closest(context).length === 1;
 };
 
 /**
@@ -345,12 +347,12 @@ Helpers.checkNodeEquality = function (obj1, obj2) {
  * @return {boolean}
  */
 Helpers.isInViewport = function (el, useBounds) {
-	var el = el[0];
-	var top = el.offsetTop;
-	var left = el.offsetLeft;
-	var width = el.offsetWidth;
-	var height = el.offsetHeight;
-	var cond = false;
+	let el = el[0];
+	let top = el.offsetTop;
+	let left = el.offsetLeft;
+	let width = el.offsetWidth;
+	let height = el.offsetHeight;
+	let cond = false;
 
 	while (el.offsetParent) {
 		el = el.offsetParent;
@@ -381,10 +383,10 @@ Helpers.isInViewport = function (el, useBounds) {
  * @return {number}
  */
 Helpers.getOuterHeight = function (el, outer) {
-	var height = el[0].offsetHeight;
+	let height = el[0].offsetHeight;
 
 	if (outer) {
-		var style = getComputedStyle(el[0]);
+		let style = getComputedStyle(el[0]);
 		height += parseInt(style.paddingTop) + parseInt(style.paddingBottom);
 	}
 	return height;
@@ -430,10 +432,10 @@ Helpers.clickHandler = function () {
  * @return {boolean}
  */
 Helpers.checkScript = function (url) {
-	var x = document.getElementsByTagName("script");
-	var scriptAdded = false;
+	let x = document.getElementsByTagName("script");
+	let scriptAdded = false;
 
-	for (var i = 0; i < x.length; i++) {
+	for (let i = 0; i < x.length; i++) {
 		if (x[i].src == url) {
 			scriptAdded = true;
 		}
@@ -452,10 +454,11 @@ Helpers.checkScript = function (url) {
  * @param {Object} callbackObj - this context
  */
 Helpers.loadScript = function (url, callbackFn, callbackObj) {
-	var scriptAdded = Helpers.checkScript(url);
+	let scriptAdded = Helpers.checkScript(url);
+	let script;
 
 	if (scriptAdded === false) {
-		var script = document.createElement("script");
+		script = document.createElement("script");
 		script.src = url;
 		document.body.appendChild(script);
 	}
@@ -504,7 +507,7 @@ if ('classList' in document.documentElement) {
 
 /**
  * Add/Update parameters for given url
- * 
+ *
  * @param {url} url - URL on which parameters should be added / changed
  * @param {string} paramName - parameter name
  * @param {string} paramValue - parameter value
@@ -512,10 +515,10 @@ if ('classList' in document.documentElement) {
  * @return {string} url
  */
 Helpers.addParamToUrl = function (url, paramName, paramValue) {
-	var urlParts = url.split('?');
-	var i = 0;
-	var baseUrl;
-	var params;
+	let urlParts = url.split('?');
+	let i = 0;
+	let baseUrl;
+	let params;
 
 	if (urlParts.length === 1) {
 		return (url + '?' + paramName + '=' + paramValue);
