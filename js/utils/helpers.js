@@ -480,29 +480,32 @@ Helpers.loadScript = function (url, callbackFn, callbackObj) {
 	return false;
 };
 
-if ('classList' in document.documentElement) {
-	Helpers.hasClass = function (elem, c) {
+Helpers.hasClass = function (elem, c) {
+	if ('classList' in document.documentElement) {
 		return elem.classList.contains(c);
-	};
-	Helpers.addClass = function (elem, c) {
-		elem.classList.add(c);
-	};
-	Helpers.removeClass = function (elem, c) {
-		elem.classList.remove(c);
-	};
-} else {
-	Helpers.hasClass = function (elem, c) {
+	} else {
 		return Helpers.regExp(c).test(elem.className);
-	};
-	Helpers.addClass = function (elem, c) {
+	}
+};
+
+Helpers.addClass = function (elem, c) {
+	if ('classList' in document.documentElement) {
+		elem.classList.add(c);
+	} else {
 		if (!Helpers.hasClass(elem, c)) {
 			elem.className = elem.className + ' ' + c;
 		}
-	};
-	Helpers.removeClass = function (elem, c) {
+	}
+};
+
+Helpers.removeClass = function (elem, c) {
+	if ('classList' in document.documentElement) {
+		elem.classList.remove(c);
+	}
+	else {
 		elem.className = elem.className.replace(Helpers.regExp(c), ' ');
-	};
-}
+	}
+};
 
 /**
  * Add/Update parameters for given url
