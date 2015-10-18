@@ -140,7 +140,6 @@ Helpers.extendMethod = function (to, from, methodName) {
 	}
 };
 
-
 // ----------------------------------
 // FUNCTIONAL HELPERS
 // ----------------------------------
@@ -153,7 +152,7 @@ Helpers.extendMethod = function (to, from, methodName) {
  *
  * @return {Array}
  */
-Helpers.querySelectorArray = function (el, context) {
+Helpers.querySelectorArray = Helpers.$ = function (el, context) {
 	if (!el) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
 	let element = el;
 	let customContext = context || document;
