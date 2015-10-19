@@ -8,7 +8,7 @@ require('document-register-element');
 let $ = App.$;
 
 // ES6 Modules
-import ButtonInit from './modules/button/button-init';
+import Button from './modules/button/button';
 import Toggle from './modules/toggle/ui-toggle';
 import EqualRows from './modules/equal-row-height/equal-row-heights';
 import Form from './modules/form/form';
@@ -45,7 +45,7 @@ class Core {
 		 */
 		Helpers.loadModule({
 			el: '[data-js-module="button"]',
-			module: ButtonInit,
+			module: Button,
 			context: context
 		});
 		
