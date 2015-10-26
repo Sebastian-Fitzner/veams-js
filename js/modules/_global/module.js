@@ -32,4 +32,6 @@ class AppModule {
 	}
 }
 
+AppModule.classMixin = Helpers.classMixin;
+
 export default AppModule;

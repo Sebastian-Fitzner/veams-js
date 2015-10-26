@@ -53,7 +53,7 @@ export default (function() {
 	/**
 	 * Add our Mixin to our Exoskeleton.View object.
 	 */
-	App.ComponentView.mixin = Helpers.viewMixin;
+	App.ComponentView.classMixin = Helpers.classMixin;
 
 	// Feature detection
 	App.support = App.support || {};
