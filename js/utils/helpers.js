@@ -510,11 +510,11 @@ Helpers.removeClass = function (elem, c) {
 /**
  * Add/Update parameters for given url
  *
- * @param {url} url - URL on which parameters should be added / changed
- * @param {string} paramName - parameter name
- * @param {string} paramValue - parameter value
+ * @param {String} url - URL on which parameters should be added / changed
+ * @param {String} paramName - parameter name
+ * @param {(String|Number)} paramValue - parameter value
  *
- * @return {string} url
+ * @returns {String} url
  */
 Helpers.addParamToUrl = function (url, paramName, paramValue) {
 	let urlParts = url.split('?');
@@ -537,6 +537,24 @@ Helpers.addParamToUrl = function (url, paramName, paramValue) {
 	}
 
 	return (baseUrl + '?' + params.join('&') + '&' + paramName + '=' + paramValue);
+};
+
+/**
+ * Generates alphanumeric id.
+ *
+ * @param {Number} [length=5] - length of generated id.
+ * @returns {String} - generated id
+ */
+Helpers.makeId = function(length) {
+	let idLength = length || 5;
+	let charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let i = 0;
+	let id = '';
+
+	for (; i < idLength; i++)
+		id += charPool.charAt(Math.floor(Math.random() * charPool.length));
+
+	return id;
 };
 
 export default Helpers;
