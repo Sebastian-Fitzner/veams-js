@@ -546,11 +546,12 @@ Helpers.addParamToUrl = function (url, paramName, paramValue) {
  * @returns {String} - generated id
  */
 Helpers.makeId = function(length) {
-	var idLength = length || 5;
-	var charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	var id = '';
+	let idLength = length || 5;
+	let charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let i = 0;
+	let id = '';
 
-	for (var i = 0; i < idLength; i++)
+	for (; i < idLength; i++)
 		id += charPool.charAt(Math.floor(Math.random() * charPool.length));
 
 	return id;
