@@ -286,11 +286,11 @@ Helpers.animationEndEvent = function () {
  */
 Helpers.requestAniFrame = function () {
 	return window.requestAnimationFrame ||
-		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame ||
-		function (callback) {
-			window.setTimeout(callback, 1000 / 60);
-		};
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			function (callback) {
+				window.setTimeout(callback, 1000 / 60);
+			};
 };
 
 // ----------------------------------
@@ -507,14 +507,15 @@ Helpers.removeClass = function (elem, c) {
 	}
 };
 
+
 /**
- * Add/Update parameters for given url
+ * Add/Update a parameter for given url
  *
- * @param {String} url - URL on which parameters should be added / changed
+ * @param {String} url - url on which the parameter should be added / updated
  * @param {String} paramName - parameter name
  * @param {(String|Number)} paramValue - parameter value
  *
- * @returns {String} url
+ * @returns {String} - url
  */
 Helpers.addParamToUrl = function (url, paramName, paramValue) {
 	let urlParts = url.split('?');
@@ -539,13 +540,36 @@ Helpers.addParamToUrl = function (url, paramName, paramValue) {
 	return (baseUrl + '?' + params.join('&') + '&' + paramName + '=' + paramValue);
 };
 
+
+/**
+ * Add/Update multiple parameters for given url
+ *
+ * @param {String} url - url on which parameters should be added / updated
+ * @param {Object} params - parameters (name/value)
+ *
+ * @returns {String} - url
+ */
+Helpers.addParamsToUrl = function (url, params) {
+	let newUrl = url;
+	let property;
+
+	for (property in params) {
+		if (params.hasOwnProperty(property)) {
+			newUrl = Helpers.addParamToUrl(newUrl, property, params[property]);
+		}
+	}
+
+	return newUrl
+};
+
+
 /**
  * Generates alphanumeric id.
  *
  * @param {Number} [length=5] - length of generated id.
  * @returns {String} - generated id
  */
-Helpers.makeId = function(length) {
+Helpers.makeId = function (length) {
 	let idLength = length || 5;
 	let charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	let i = 0;
