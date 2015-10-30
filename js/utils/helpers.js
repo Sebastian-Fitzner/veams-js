@@ -519,26 +519,11 @@ Helpers.removeClass = function (elem, c) {
  * @returns {String} - url
  */
 Helpers.addParamToUrl = function (url, paramName, paramValue) {
-	let urlParts = url.split('?');
-	let i = 0;
-	let baseUrl;
-	let params;
+	let params = {};
 
-	if (urlParts.length === 1) {
-		return (url + '?' + paramName + '=' + paramValue);
-	}
+	params[paramName] = paramValue;
 
-	baseUrl = urlParts[0];
-	params = urlParts[1].split('&');
-
-	for (i; i < params.length; i++) {
-		if (params[i].indexOf(paramName + '=') > -1) {
-			params[i] = paramName + '=' + paramValue;
-			return (baseUrl + '?' + params.join('&'));
-		}
-	}
-
-	return (baseUrl + '?' + params.join('&') + '&' + paramName + '=' + paramValue);
+	return Helpers.updateUrl(url, params);
 };
 
 
