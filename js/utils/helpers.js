@@ -511,6 +511,7 @@ Helpers.removeClass = function (elem, c) {
 /**
  * Add/Update a parameter for given url
  *
+ * @deprecated use Helpers.updateUrl instead
  * @param {String} url - url on which the parameter should be added / updated
  * @param {String} paramName - parameter name
  * @param {(String|Number)} paramValue - parameter value
@@ -547,19 +548,45 @@ Helpers.addParamToUrl = function (url, paramName, paramValue) {
  * @param {String} url - url on which parameters should be added / updated
  * @param {Object} params - parameters (name/value)
  *
- * @returns {String} - url
+ * @returns {String} - resulting url
  */
-Helpers.addParamsToUrl = function (url, params) {
-	let newUrl = url;
-	let property;
+Helpers.updateUrl = function (url, params) {
+	let urlParts = url.split('?');
+	let tmpParams = [];
+	let originalParams = [];
+	let newParams = [];
+	let baseUrl = '';
+	let property = '';
+	let updated = false;
+	let i = 0;
+	let j = 0;
 
 	for (property in params) {
 		if (params.hasOwnProperty(property)) {
-			newUrl = Helpers.addParamToUrl(newUrl, property, params[property]);
+			tmpParams.push([property, '=', params[property]].join(''));
 		}
 	}
 
-	return newUrl
+	baseUrl = urlParts[0];
+	originalParams = urlParts.length > 1 ? urlParts[1].split('&') : [];
+
+	for (i; i < tmpParams.length; i++) {
+		updated = false;
+
+		for (j = 0; j < originalParams.length; j++) {
+			if (tmpParams[i] && originalParams[j].split('=')[0] === tmpParams[i].split('=')[0]) {
+				originalParams[j] = tmpParams[i];
+				updated = true;
+				break;
+			}
+		}
+
+		if (!updated) {
+			newParams.push(tmpParams[i]);
+		}
+	}
+
+	return ([baseUrl, '?', originalParams.concat(newParams).join('&')].join(''));
 };
 
 
