@@ -2,9 +2,6 @@
 import App from './app';
 import Helpers from './utils/helpers';
 
-require('respimage');
-require('document-register-element');
-
 let $ = App.$;
 
 // ES6 Modules
@@ -109,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	 * Initialize modules which are loaded after initial load
 	 * via custom event 'DOMchanged'
 	 */
-	App.Vent.on(App.Events.DOMchanged, (context) => {
+	App.Vent.on(App.EVENTS.DOMchanged, (context) => {
 		Helpers.querySelectorArray(context).forEach((itemContext) => {
 			console.log('Dom has changed. Initialising new modules in: ', itemContext);
 			core.render(itemContext);

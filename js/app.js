@@ -1,11 +1,13 @@
 import Helpers from './utils/helpers';
-import Events from './utils/events';
+import EVENTS from './utils/events';
 
 var $ = require('jquery');
 var Exoskeleton = require('exoskeleton');
 // require('backbone.touch');
 
-export default (function() {
+require('respimage');
+
+export default (function () {
 	'use strict';
 
 	// ----------------------------------
@@ -26,20 +28,20 @@ export default (function() {
 	// Add globals
 	App.Exoskeleton = Exoskeleton;
 	App.$ = $;
-	App.Events = Events;
+	App.EVENTS = EVENTS;
 
 	/**
 	 * Create custom view with own properties and
 	 * take this view in our modules
 	 * register only one reference to our global library Exoskeleton
 	 */
-	App.ComponentView = function(options) {
+	App.ComponentView = function (options) {
 		Exoskeleton.View.call(this, options);
 	};
-	App.ComponentModel = function(options) {
+	App.ComponentModel = function (options) {
 		Exoskeleton.Model.call(this, options);
 	};
-	App.ComponentCollection = function(options) {
+	App.ComponentCollection = function (options) {
 		Exoskeleton.Collection.call(this, options);
 	};
 
@@ -50,8 +52,9 @@ export default (function() {
 	App.ComponentView.extend = Exoskeleton.View.extend;
 	App.ComponentModel.extend = Exoskeleton.Model.extend;
 	App.ComponentCollection.extend = Exoskeleton.Collection.extend;
+
 	/**
-	 * Add our Mixin to our Exoskeleton.View object.
+	 * Add our Mixin to our View object.
 	 */
 	App.ComponentView.classMixin = Helpers.classMixin;
 
@@ -63,19 +66,20 @@ export default (function() {
 	// Versioning
 	App.version = "0.1.0";
 
-	// ----------------------------------
-	// CHECKING
-	// ----------------------------------
-
 	// Media Query
 	var head = document.querySelectorAll('head');
 	App.currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
+
+
+	// ----------------------------------
+	// CHECKING
+	// ----------------------------------
 
 	// disable devmode logging if not on ie9 and parameter "devmode" not present
 	if (document.querySelectorAll('html')[0].className.indexOf('ie9') < 0) {
 		if (document.location.search.indexOf('devmode') < 0) {
 			// hide all warnings and logs if not in devmode
-			console.log = console.warn = function() {
+			console.log = console.warn = function () {
 			};
 		} else {
 			App.devmode = true;
@@ -85,7 +89,7 @@ export default (function() {
 		// IE9 FIX: in ie9 window.console seems to be undefined until you open dev tools
 		if (!window.console) {
 			window.console = {};
-			console.log = console.warn = function() {
+			console.log = console.warn = function () {
 			};
 		}
 	}
@@ -98,23 +102,8 @@ export default (function() {
 	 * Triggers
 	 */
 
-	// Media Query
-	var head = document.querySelectorAll('head');
-	App.currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
-
-	// disable devmode logging if not on ie9 and parameter "devmode" not present
-	if (document.querySelectorAll('html')[0].className.indexOf('ie9') < 0) {
-		if (document.location.search.indexOf('devmode') < 0) {
-			// hide all warnings and logs if not in devmode
-			console.log = console.warn = function() {
-			};
-		} else {
-			App.devmode = true;
-		}
-	}
-
-	// Trigger global resize event
-	window.onresize = function(e) {
+		// Trigger global resize event
+	window.onresize = function (e) {
 		var currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
 
 		if (currentMedia !== App.currentMedia) {
@@ -123,18 +112,18 @@ export default (function() {
 			App.currentMedia = currentMedia;
 			console.log('App.currentMedia: ', App.currentMedia);
 
-			App.Vent.trigger(App.Events.mediachange, {
-				type: App.Events.mediachange,
+			App.Vent.trigger(App.EVENTS.mediachange, {
+				type: App.EVENTS.mediachange,
 				currentMedia: currentMedia,
 				oldMedia: oldMedia
 			});
 		}
 
-		App.Vent.trigger(App.Events.resize, e);
+		App.Vent.trigger(App.EVENTS.resize, e);
 	};
 
-	document.onscroll = function(e) {
-		App.Vent.trigger(App.Events.scroll, e);
+	document.onscroll = function (e) {
+		App.Vent.trigger(App.EVENTS.scroll, e);
 	};
 
 	/**
@@ -142,7 +131,7 @@ export default (function() {
 	 */
 
 		// Redirect
-	App.Vent.on(App.Events.DOMredirect, (obj) => {
+	App.Vent.on(App.EVENTS.DOMredirect, (obj) => {
 		if (!obj && !obj.url) throw new Error('Object is not defined. Please provide an url in your object!');
 
 		// Redirect to page
