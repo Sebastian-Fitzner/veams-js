@@ -2,14 +2,15 @@
 import App from './app';
 import Helpers from './utils/helpers';
 
-let $ = App.$;
-
 // ES6 Modules
 import Button from './modules/button/button';
 import Toggle from './modules/toggle/ui-toggle';
 import EqualRows from './modules/equal-row-height/equal-row-heights';
 import Form from './modules/form/form';
 import FormAjax from './modules/form/form-ajax';
+
+// Vars
+const $ = App.$;
 
 "use strict";
 
