@@ -1,13 +1,15 @@
 /**
  * Represents a imageLoader Mixin.
+ * With this mixin you can extend a view or the module class and
+ * add the possibility to support the execution of the render method
+ * only after all images are loaded (i.e. equal-row-height.js)
+ *
  * @module ImageLoader
  *
  * @author Sebastian Fitzner
  */
 import Helpers from '../../utils/helpers';
 import App from '../../app';
-
-var $ = App.$;
 
 "use strict";
 /**
@@ -25,17 +27,18 @@ var ImageLoader = {
 	 * Bind image loader events
 	 */
 	bindImageLoaderEvents: function () {
-		App.Vent.on(App.Events.resize, this.checkImages.bind(this));
+		let checkImages = this.checkImages.bind(this);
+
+		App.Vent.on(App.Events.resize, checkImages);
 	},
 
 	/**
 	 * Check images in our view
-	 * @param {string} el - element which contains our images
 	 */
-	checkImages: function (el) {
-		var imgs = $('img', el);
-		var loadedImgs = 0;
-		var totalImgs = imgs.length || 0;
+	checkImages: function () {
+		let imgs = Helpers.$('img', this.el);
+		let loadedImgs = 0;
+		let totalImgs = imgs.length || 0;
 
 		if (totalImgs === 0) {
 			this.render()
@@ -51,7 +54,7 @@ var ImageLoader = {
 	 * @param {number} totalImgs - image length in our element
 	 */
 	checkImageLoading: function (imgs, loadedImgs, totalImgs) {
-		var timeout;
+		let timeout;
 		loadedImgs = 0;
 
 		Helpers.forEach(imgs, (i, el) => {
