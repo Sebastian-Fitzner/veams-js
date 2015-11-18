@@ -147,17 +147,17 @@ Helpers.extendMethod = function (to, from, methodName) {
 /**
  * Get dom elements in an array
  *
- * @param {String} el - Required: selector
+ * @param {String} elem - Required: selector
  * @param {Object} [context] - Optional: context
  *
  * @return {Array}
  */
-Helpers.querySelectorArray = Helpers.$ = function (el, context) {
-	if (!el) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
-	let element = el;
+Helpers.querySelectorArray = Helpers.$ = function (elem, context) {
+	if (!elem) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
+	let el = elem;
 	let customContext = context || document;
 
-	return Array.prototype.slice.call((customContext).querySelectorAll(element));
+	return Array.prototype.slice.call((customContext).querySelectorAll(el));
 };
 
 /**
@@ -315,13 +315,13 @@ Helpers.hasParent = function (e, p) {
  * Check if element is in a specific context
  * and return state as boolean
  *
- * @param {Object} el - Element, which will be checked
+ * @param {Object} elem - Element, which will be checked
  * @param {Object} context - Context element, in which our element could persists
  *
  * @return {boolean}
  */
-Helpers.checkElementInContext = function (el, context) {
-	return el.closest(context).length === 1;
+Helpers.checkElementInContext = function (elem, context) {
+	return elem.closest(context).length === 1;
 };
 
 /**
@@ -340,13 +340,13 @@ Helpers.checkNodeEquality = function (obj1, obj2) {
 /**
  * Check if element is in viewport
  *
- * @param {Object} el - Object, which we want to check
+ * @param {Object} elem - Object, which we want to check
  * @param {boolean} useBounds - if true, whole element must be visible
  *
  * @return {boolean}
  */
-Helpers.isInViewport = function (el, useBounds) {
-	let el = el[0];
+Helpers.isInViewport = function (elem, useBounds) {
+	let el = elem[0];
 	let top = el.offsetTop;
 	let left = el.offsetLeft;
 	let width = el.offsetWidth;
@@ -376,16 +376,17 @@ Helpers.isInViewport = function (el, useBounds) {
  * Calculates the outer height for the given DOM element, including the
  * contributions of margin.
  *
- * @param {Object} el - the element of which to calculate the outer height
+ * @param {Object} elem - the element of which to calculate the outer height
  * @param {boolean} outer - add padding to height calculation
  *
  * @return {number}
  */
-Helpers.getOuterHeight = function (el, outer) {
-	let height = el[0].offsetHeight;
+Helpers.getOuterHeight = function (elem, outer) {
+	let el = elem[0];
+	let height = el.offsetHeight;
 
 	if (outer) {
-		let style = getComputedStyle(el[0]);
+		let style = getComputedStyle(el);
 		height += parseInt(style.paddingTop) + parseInt(style.paddingBottom);
 	}
 	return height;

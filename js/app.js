@@ -3,7 +3,6 @@ import EVENTS from './utils/events';
 
 var $ = require('jquery');
 var Exoskeleton = require('exoskeleton');
-// require('backbone.touch');
 
 require('respimage');
 
@@ -21,8 +20,7 @@ export default (function () {
 
 	// @borrow objects
 	var App = root.App = Helpers.extend(window.App || {}, {
-		Vent: Helpers.extend({}, Exoskeleton.Events),
-		ui: {}
+		Vent: Helpers.extend({}, Exoskeleton.Events)
 	});
 
 	// Add globals

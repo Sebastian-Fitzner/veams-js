@@ -1,6 +1,6 @@
 import Helpers from '../../utils/helpers';
 import App from '../../app';
-var $ = App.$;
+const $ = App.$;
 
 class AppModule {
 
