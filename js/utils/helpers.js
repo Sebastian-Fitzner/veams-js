@@ -286,11 +286,11 @@ Helpers.animationEndEvent = function () {
  */
 Helpers.requestAniFrame = function () {
 	return window.requestAnimationFrame ||
-		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame ||
-		function (callback) {
-			window.setTimeout(callback, 1000 / 60);
-		};
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			function (callback) {
+				window.setTimeout(callback, 1000 / 60);
+			};
 };
 
 // ----------------------------------
@@ -507,36 +507,90 @@ Helpers.removeClass = function (elem, c) {
 	}
 };
 
+
 /**
- * Add/Update parameters for given url
+ * Add/Update a parameter for given url
  *
- * @param {url} url - URL on which parameters should be added / changed
- * @param {string} paramName - parameter name
- * @param {string} paramValue - parameter value
+ * @deprecated use Helpers.updateUrl instead
+ * @param {String} url - url on which the parameter should be added / updated
+ * @param {String} paramName - parameter name
+ * @param {(String|Number)} paramValue - parameter value
  *
- * @return {string} url
+ * @returns {String} - url
  */
 Helpers.addParamToUrl = function (url, paramName, paramValue) {
+	let params = {};
+
+	params[paramName] = paramValue;
+
+	return Helpers.updateUrl(url, params);
+};
+
+
+/**
+ * Add/Update multiple parameters for given url
+ *
+ * @param {String} url - url on which parameters should be added / updated
+ * @param {Object} params - parameters (name/value)
+ *
+ * @returns {String} - resulting url
+ */
+Helpers.updateUrl = function (url, params) {
 	let urlParts = url.split('?');
+	let tmpParams = [];
+	let originalParams = [];
+	let newParams = [];
+	let baseUrl = '';
+	let property = '';
+	let updated = false;
 	let i = 0;
-	let baseUrl;
-	let params;
+	let j = 0;
 
-	if (urlParts.length === 1) {
-		return (url + '?' + paramName + '=' + paramValue);
-	}
-
-	baseUrl = urlParts[0];
-	params = urlParts[1].split('&');
-
-	for (i; i < params.length; i++) {
-		if (params[i].indexOf(paramName + '=') > -1) {
-			params[i] = paramName + '=' + paramValue;
-			return (baseUrl + '?' + params.join('&'));
+	for (property in params) {
+		if (params.hasOwnProperty(property)) {
+			tmpParams.push([property, '=', params[property]].join(''));
 		}
 	}
 
-	return (baseUrl + '?' + params.join('&') + '&' + paramName + '=' + paramValue);
+	baseUrl = urlParts[0];
+	originalParams = urlParts.length > 1 ? urlParts[1].split('&') : [];
+
+	for (i; i < tmpParams.length; i++) {
+		updated = false;
+
+		for (j = 0; j < originalParams.length; j++) {
+			if (tmpParams[i] && originalParams[j].split('=')[0] === tmpParams[i].split('=')[0]) {
+				originalParams[j] = tmpParams[i];
+				updated = true;
+				break;
+			}
+		}
+
+		if (!updated) {
+			newParams.push(tmpParams[i]);
+		}
+	}
+
+	return ([baseUrl, '?', originalParams.concat(newParams).join('&')].join(''));
+};
+
+
+/**
+ * Generates alphanumeric id.
+ *
+ * @param {Number} [length=5] - length of generated id.
+ * @returns {String} - generated id
+ */
+Helpers.makeId = function (length) {
+	let idLength = length || 5;
+	let charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let i = 0;
+	let id = '';
+
+	for (; i < idLength; i++)
+		id += charPool.charAt(Math.floor(Math.random() * charPool.length));
+
+	return id;
 };
 
 export default Helpers;
