@@ -70,6 +70,11 @@ export default (function () {
 	var head = document.querySelectorAll('head');
 	App.currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
 
+	// Screen Size
+	App.screenSize = {
+		width: root.innerWidth,
+		height: root.innerHeight
+	};
 
 	// ----------------------------------
 	// CHECKING
@@ -102,12 +107,13 @@ export default (function () {
 	 * Triggers
 	 */
 
-		// Trigger global resize event
+	// Trigger global resize event
 	window.onresize = function (e) {
-		var currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
+		let currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
+		let width = window.innerWidth;
 
 		if (currentMedia !== App.currentMedia) {
-			var oldMedia = App.currentMedia;
+			let oldMedia = App.currentMedia;
 
 			App.currentMedia = currentMedia;
 			console.log('App.currentMedia: ', App.currentMedia);
@@ -119,7 +125,10 @@ export default (function () {
 			});
 		}
 
-		App.Vent.trigger(App.EVENTS.resize, e);
+		if (width != App.screenSize.width) {
+			App.screenSize.width = width;
+			App.Vent.trigger(App.EVENTS.resize, e);
+		}
 	};
 
 	document.onscroll = function (e) {
@@ -130,7 +139,7 @@ export default (function () {
 	 * Listeners
 	 */
 
-		// Redirect
+	// Redirect
 	App.Vent.on(App.EVENTS.DOMredirect, (obj) => {
 		if (!obj && !obj.url) throw new Error('Object is not defined. Please provide an url in your object!');
 
