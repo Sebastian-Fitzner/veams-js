@@ -1,8 +1,8 @@
 import Helpers from './utils/helpers';
 import EVENTS from './utils/events';
 
-var $ = require('jquery');
-var Exoskeleton = require('exoskeleton');
+const $ = require('jquery');
+const Exoskeleton = require('exoskeleton');
 
 require('respimage');
 
@@ -14,12 +14,12 @@ export default (function () {
 	// ----------------------------------
 
 	// Save a reference to the global object
-	var root = window;
+	let root = window;
 	root.Backbone = {};
 	root.Backbone.$ = $;
 
 	// @borrow objects
-	var App = root.App = Helpers.extend(window.App || {}, {
+	let App = root.App = Helpers.extend(window.App || {}, {
 		Vent: Helpers.extend({}, Exoskeleton.Events)
 	});
 
@@ -65,7 +65,7 @@ export default (function () {
 	App.version = "0.1.0";
 
 	// Media Query
-	var head = document.querySelectorAll('head');
+	let head = document.querySelectorAll('head');
 	App.currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
 
 	// Screen Size

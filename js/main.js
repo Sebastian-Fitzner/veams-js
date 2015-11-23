@@ -96,7 +96,7 @@ class Core {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-	var core = new Core();
+	let core = new Core();
 
 	/**
 	 * Render modules
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	 * via custom event 'DOMchanged'
 	 */
 	App.Vent.on(App.EVENTS.DOMchanged, (context) => {
-		Helpers.querySelectorArray(context).forEach((itemContext) => {
+		Helpers.$(context).forEach((itemContext) => {
 			console.log('Dom has changed. Initialising new modules in: ', itemContext);
 			core.render(itemContext);
 		});
