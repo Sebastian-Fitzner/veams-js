@@ -11,6 +11,8 @@
 import Helpers from '../../utils/helpers';
 import App from '../../app';
 
+const $ = Helpers.$;
+
 "use strict";
 /**
  * @alias module:imageLoader
@@ -36,7 +38,7 @@ var ImageLoader = {
 	 * Check images in our view
 	 */
 	checkImages: function () {
-		let imgs = Helpers.$('img', this.el);
+		let imgs = $('img', this.el);
 		let loadedImgs = 0;
 		let totalImgs = imgs.length || 0;
 
@@ -49,7 +51,7 @@ var ImageLoader = {
 
 	/**
 	 * Check the loading status of our images
-	 * @param {string} imgs - images
+	 * @param {object} imgs - images object
 	 * @param {number} loadedImgs - images which are already loaded
 	 * @param {number} totalImgs - image length in our element
 	 */
