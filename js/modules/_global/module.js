@@ -5,7 +5,13 @@ const $ = App.$;
 
 class AppModule {
 
-	constructor(obj, options) {
+	/**
+	 * Contructor
+	 *
+	 * to save standard elements like el and options and
+	 * exeute initialize as default method
+	 */
+	constructor(obj = {}, options = {}) {
 		this.el = obj.el;
 		this.$el = $(obj.el);
 		this.options = options;
