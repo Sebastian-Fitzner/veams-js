@@ -133,18 +133,6 @@ export default (function () {
 		App.Vent.trigger(App.EVENTS.scroll, e);
 	};
 
-	/**
-	 * Listeners
-	 */
-
-	// Redirect
-	App.Vent.on(App.EVENTS.DOMredirect, (obj) => {
-		if (!obj && !obj.url) throw new Error('Object is not defined. Please provide an url in your object!');
-
-		// Redirect to page
-		window.location.href = String(obj.url);
-	});
-
 	return App;
 
 }).call(this);

@@ -1,18 +1,15 @@
 // Main Requirements
-import App from './app';
+import App from './core';
 import Helpers from './utils/helpers';
 
 // ES6 Modules
-import Button from './modules/button/button';
-import Toggle from './modules/toggle/ui-toggle';
 import EqualRows from './modules/equal-row-height/equal-row-heights';
-import Form from './modules/form/form';
 import FormAjax from './modules/form/form-ajax';
 
 // Vars
 const $ = App.$;
 
-"use strict";
+'use strict';
 
 // Main Functionality
 class Core {
@@ -35,36 +32,17 @@ class Core {
 		} else {
 			$('html').addClass('touch');
 		}
+
+		// Redirect
+		App.Vent.on(App.EVENTS.DOMredirect, (obj) => {
+			if (!obj && !obj.url) throw new Error('Object is not defined. Please provide an url in your object!');
+
+			// Redirect to page
+			window.location.href = String(obj.url);
+		});
 	}
 
 	render(context) {
-		/**
-		 * Init Buttons
-		 */
-		Helpers.loadModule({
-			el: '[data-js-module="button"]',
-			module: Button,
-			context: context
-		});
-		
-		/**
-		 * Init Toggle
-		 */
-		Helpers.loadModule({
-			el: '[data-js-module="toggle"]',
-			module: Toggle,
-			render: false,
-			context: context
-		});
-
-		/**
-		 * Init Forms
-		 */
-		Helpers.loadModule({
-			el: '[data-js-module~="form"]',
-			module: Form,
-			context: context
-		});
 
 		/**
 		 * Init AjaxForm
@@ -83,9 +61,9 @@ class Core {
 			el: '[data-js-module~="equal"]',
 			module: EqualRows,
 			render: false,
-			cb: function(module, options) {
+			cb: function (module, options) {
 				if (options && options.delayInit) {
-					$(window).load(function() {
+					$(window).load(function () {
 						module._reinit(module);
 					});
 				}
@@ -95,22 +73,20 @@ class Core {
 	}
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 	let core = new Core();
 
 	/**
 	 * Render modules
 	 */
-	core.render();
+	core.render(document);
 
 	/**
 	 * Initialize modules which are loaded after initial load
 	 * via custom event 'DOMchanged'
 	 */
 	App.Vent.on(App.EVENTS.DOMchanged, (context) => {
-		Helpers.$(context).forEach((itemContext) => {
-			console.log('Dom has changed. Initialising new modules in: ', itemContext);
-			core.render(itemContext);
-		});
+		console.log('Dom has changed. Initialising new modules in: ', context);
+		core.render(context);
 	});
 });
