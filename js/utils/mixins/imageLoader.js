@@ -31,7 +31,7 @@ var ImageLoader = {
 	bindImageLoaderEvents: function () {
 		let checkImages = this.checkImages.bind(this);
 
-		App.Vent.on(App.Events.resize, checkImages);
+		App.Vent.on(App.EVENTS.resize, checkImages);
 	},
 
 	/**
@@ -51,7 +51,7 @@ var ImageLoader = {
 
 	/**
 	 * Check the loading status of our images
-	 * @param {object} imgs - images object
+	 * @param {string} imgs - images
 	 * @param {number} loadedImgs - images which are already loaded
 	 * @param {number} totalImgs - image length in our element
 	 */
