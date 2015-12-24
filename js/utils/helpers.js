@@ -147,17 +147,17 @@ Helpers.extendMethod = function (to, from, methodName) {
 /**
  * Get dom elements in an array
  *
- * @param {String} el - Required: selector
+ * @param {String} elem - Required: selector
  * @param {Object} [context] - Optional: context
  *
  * @return {Array}
  */
-Helpers.querySelectorArray = Helpers.$ = function (el, context) {
-	if (!el) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
-	let element = el;
+Helpers.querySelectorArray = Helpers.$ = function (elem, context) {
+	if (!elem) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
+	let el = elem;
 	let customContext = context || document;
 
-	return Array.prototype.slice.call((customContext).querySelectorAll(element));
+	return Array.prototype.slice.call((customContext).querySelectorAll(el));
 };
 
 /**
@@ -286,11 +286,11 @@ Helpers.animationEndEvent = function () {
  */
 Helpers.requestAniFrame = function () {
 	return window.requestAnimationFrame ||
-		window.webkitRequestAnimationFrame ||
-		window.mozRequestAnimationFrame ||
-		function (callback) {
-			window.setTimeout(callback, 1000 / 60);
-		};
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			function (callback) {
+				window.setTimeout(callback, 1000 / 60);
+			};
 };
 
 // ----------------------------------
@@ -315,13 +315,13 @@ Helpers.hasParent = function (e, p) {
  * Check if element is in a specific context
  * and return state as boolean
  *
- * @param {Object} el - Element, which will be checked
+ * @param {Object} elem - Element, which will be checked
  * @param {Object} context - Context element, in which our element could persists
  *
  * @return {boolean}
  */
-Helpers.checkElementInContext = function (el, context) {
-	return el.closest(context).length === 1;
+Helpers.checkElementInContext = function (elem, context) {
+	return elem.closest(context).length === 1;
 };
 
 /**
@@ -340,13 +340,13 @@ Helpers.checkNodeEquality = function (obj1, obj2) {
 /**
  * Check if element is in viewport
  *
- * @param {Object} el - Object, which we want to check
+ * @param {Object} elem - Object, which we want to check
  * @param {boolean} useBounds - if true, whole element must be visible
  *
  * @return {boolean}
  */
-Helpers.isInViewport = function (el, useBounds) {
-	let el = el[0];
+Helpers.isInViewport = function (elem, useBounds) {
+	let el = elem[0];
 	let top = el.offsetTop;
 	let left = el.offsetLeft;
 	let width = el.offsetWidth;
@@ -376,16 +376,17 @@ Helpers.isInViewport = function (el, useBounds) {
  * Calculates the outer height for the given DOM element, including the
  * contributions of margin.
  *
- * @param {Object} el - the element of which to calculate the outer height
+ * @param {Object} elem - the element of which to calculate the outer height
  * @param {boolean} outer - add padding to height calculation
  *
  * @return {number}
  */
-Helpers.getOuterHeight = function (el, outer) {
-	let height = el[0].offsetHeight;
+Helpers.getOuterHeight = function (elem, outer) {
+	let el = elem[0];
+	let height = el.offsetHeight;
 
 	if (outer) {
-		let style = getComputedStyle(el[0]);
+		let style = getComputedStyle(el);
 		height += parseInt(style.paddingTop) + parseInt(style.paddingBottom);
 	}
 	return height;
@@ -507,36 +508,90 @@ Helpers.removeClass = function (elem, c) {
 	}
 };
 
+
 /**
- * Add/Update parameters for given url
+ * Add/Update a parameter for given url
  *
- * @param {url} url - URL on which parameters should be added / changed
- * @param {string} paramName - parameter name
- * @param {string} paramValue - parameter value
+ * @deprecated use Helpers.updateUrl instead
+ * @param {String} url - url on which the parameter should be added / updated
+ * @param {String} paramName - parameter name
+ * @param {(String|Number)} paramValue - parameter value
  *
- * @return {string} url
+ * @returns {String} - url
  */
 Helpers.addParamToUrl = function (url, paramName, paramValue) {
+	let params = {};
+
+	params[paramName] = paramValue;
+
+	return Helpers.updateUrl(url, params);
+};
+
+
+/**
+ * Add/Update multiple parameters for given url
+ *
+ * @param {String} url - url on which parameters should be added / updated
+ * @param {Object} params - parameters (name/value)
+ *
+ * @returns {String} - resulting url
+ */
+Helpers.updateUrl = function (url, params) {
 	let urlParts = url.split('?');
+	let tmpParams = [];
+	let originalParams = [];
+	let newParams = [];
+	let baseUrl = '';
+	let property = '';
+	let updated = false;
 	let i = 0;
-	let baseUrl;
-	let params;
+	let j = 0;
 
-	if (urlParts.length === 1) {
-		return (url + '?' + paramName + '=' + paramValue);
-	}
-
-	baseUrl = urlParts[0];
-	params = urlParts[1].split('&');
-
-	for (i; i < params.length; i++) {
-		if (params[i].indexOf(paramName + '=') > -1) {
-			params[i] = paramName + '=' + paramValue;
-			return (baseUrl + '?' + params.join('&'));
+	for (property in params) {
+		if (params.hasOwnProperty(property)) {
+			tmpParams.push([property, '=', params[property]].join(''));
 		}
 	}
 
-	return (baseUrl + '?' + params.join('&') + '&' + paramName + '=' + paramValue);
+	baseUrl = urlParts[0];
+	originalParams = urlParts.length > 1 ? urlParts[1].split('&') : [];
+
+	for (i; i < tmpParams.length; i++) {
+		updated = false;
+
+		for (j = 0; j < originalParams.length; j++) {
+			if (tmpParams[i] && originalParams[j].split('=')[0] === tmpParams[i].split('=')[0]) {
+				originalParams[j] = tmpParams[i];
+				updated = true;
+				break;
+			}
+		}
+
+		if (!updated) {
+			newParams.push(tmpParams[i]);
+		}
+	}
+
+	return ([baseUrl, '?', originalParams.concat(newParams).join('&')].join(''));
+};
+
+
+/**
+ * Generates alphanumeric id.
+ *
+ * @param {Number} [length=5] - length of generated id.
+ * @returns {String} - generated id
+ */
+Helpers.makeId = function (length) {
+	let idLength = length || 5;
+	let charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let i = 0;
+	let id = '';
+
+	for (; i < idLength; i++)
+		id += charPool.charAt(Math.floor(Math.random() * charPool.length));
+
+	return id;
 };
 
 export default Helpers;

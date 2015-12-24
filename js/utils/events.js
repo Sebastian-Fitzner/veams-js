@@ -4,7 +4,7 @@
  * @author: Sebastian Fitzner
  */
 
-const Events = {
+const EVENTS = {
 	btnClose: 'button:close',
 	btnOpen: 'button:open',
 	DOMchanged: 'DOMchanged',
@@ -24,4 +24,4 @@ const Events = {
 	uiOverlayClose: 'uiOverlay:populate'
 };
 
-export default Events;
+export default EVENTS;
