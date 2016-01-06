@@ -42,13 +42,17 @@ class Core {
 		});
 	}
 
+	preRender() {
+		Helpers.saveDOM();
+	}
+
 	render(context) {
 
 		/**
 		 * Init AjaxForm
 		 */
 		Helpers.loadModule({
-			el: '[data-js-module~="form-ajax"]',
+			domName: 'form-ajax',
 			module: FormAjax,
 			render: false,
 			context: context
@@ -58,7 +62,7 @@ class Core {
 		 * Init Equal Rows
 		 */
 		Helpers.loadModule({
-			el: '[data-js-module~="equal"]',
+			domName: 'equal',
 			module: EqualRows,
 			render: false,
 			cb: function (module, options) {
@@ -79,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	/**
 	 * Render modules
 	 */
+	core.preRender();
 	core.render(document);
 
 	/**
@@ -87,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	 */
 	App.Vent.on(App.EVENTS.DOMchanged, (context) => {
 		console.log('Dom has changed. Initialising new modules in: ', context);
+		core.preRender();
 		core.render(context);
 	});
 });

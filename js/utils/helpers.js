@@ -16,6 +16,17 @@ let Helpers = {};
 // MODULE HELPERS
 // ----------------------------------
 
+
+/**
+ * Save/Update DOM references for JS Modules
+ *
+ *
+ */
+Helpers.saveDOM = function () {
+	Helpers.dataJsModules = Helpers.querySelectorArray('[data-js-module]');
+};
+
+
 /**
  * Initialize a module and render it and/or provide a callback function
  *
@@ -28,26 +39,28 @@ let Helpers = {};
  *
  */
 Helpers.loadModule = function (obj) {
-	if (!obj.el) throw new Error('In order to work with loadModule you need to define an element as string!');
-	if (!obj.module) throw new Error('In order to work with loadModule you need to define a Module!');
+	if (!obj.domName) throw new Error('In order to work with loadModule you need to define the module name (defined in data-js-module attribute) as string! ');
+		if (!obj.module) throw new Error('In order to work with loadModule you need to define a Module!');
 
-	let moduleList = Helpers.querySelectorArray(obj.el, obj.context);
-	let renderOnInit = obj.render !== false;
+		let context = obj.context || document.querySelector('html');
+		let renderOnInit = obj.render !== false;
 
-	Helpers.forEach(moduleList, (i, el) => {
-		let attrs = el.getAttribute('data-js-options');
-		let options = JSON.parse(attrs);
+		Helpers.forEach(Helpers.dataJsModules, (i, el) => {
+			if (el.getAttribute('data-js-module') === obj.domName && Helpers.checkElementInContext(el, context)) {
+				let attrs = el.getAttribute('data-js-options');
+				let options = JSON.parse(attrs);
 
-		let module = new obj.module({
-			el: el,
-			options: options
+				let module = new obj.module({
+					el: el,
+					options: options
+				});
+
+				// Render after initial module loading
+				if (renderOnInit) module.render();
+				// Provide callback function in which you can use module and options
+				if (obj.cb && typeof(obj.cb) === "function") obj.cb(module, options);
+			}
 		});
-
-		// Render after initial module loading
-		if (renderOnInit) module.render();
-		// Provide callback function in which you can use module and options
-		if (obj.cb && typeof(obj.cb) === "function") obj.cb(module, options);
-	});
 };
 
 // ----------------------------------
@@ -155,7 +168,7 @@ Helpers.extendMethod = function (to, from, methodName) {
 Helpers.querySelectorArray = Helpers.$ = function (elem, context) {
 	if (!elem) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
 	let el = elem;
-	let customContext = context || document;
+	let customContext = context[0] || context || document;
 
 	return Array.prototype.slice.call((customContext).querySelectorAll(el));
 };
@@ -300,6 +313,7 @@ Helpers.requestAniFrame = function () {
 /**
  * based on https://github.com/inuyaksa/jquery.nicescroll/blob/master/jquery.nicescroll.js
  *
+ * Todo: merge with checkElementInContext
  * @return {boolean}
  */
 Helpers.hasParent = function (e, p) {
@@ -315,13 +329,25 @@ Helpers.hasParent = function (e, p) {
  * Check if element is in a specific context
  * and return state as boolean
  *
+ * Todo: merge with hasParent
  * @param {Object} elem - Element, which will be checked
  * @param {Object} context - Context element, in which our element could persists
  *
  * @return {boolean}
  */
 Helpers.checkElementInContext = function (elem, context) {
-	return elem.closest(context).length === 1;
+	let currentNode = elem[0] || elem;
+	let contextNode = context[0] || context;
+
+	while (currentNode.parentNode) {
+		currentNode = currentNode.parentNode;
+
+		if (Helpers.checkNodeEquality(currentNode, contextNode)) {
+			return true;
+		}
+	}
+
+	return false;
 };
 
 /**
@@ -333,6 +359,9 @@ Helpers.checkElementInContext = function (elem, context) {
  * @return {boolean}
  */
 Helpers.checkNodeEquality = function (obj1, obj2) {
+	let obj1 = obj1[0] || obj1;
+	let obj2 = obj2[0] || obj2;
+
 	return (obj1 === obj2);
 };
 
@@ -346,7 +375,7 @@ Helpers.checkNodeEquality = function (obj1, obj2) {
  * @return {boolean}
  */
 Helpers.isInViewport = function (elem, useBounds) {
-	let el = elem[0];
+	let el = elem[0] || elem;
 	let top = el.offsetTop;
 	let left = el.offsetLeft;
 	let width = el.offsetWidth;
@@ -382,7 +411,7 @@ Helpers.isInViewport = function (elem, useBounds) {
  * @return {number}
  */
 Helpers.getOuterHeight = function (elem, outer) {
-	let el = elem[0];
+	let el = elem[0] || elem;
 	let height = el.offsetHeight;
 
 	if (outer) {
@@ -447,7 +476,7 @@ Helpers.checkScript = function (url) {
  * Load scripts asynchronous,
  * check if script is already added,
  * optional check if script is fully loaded and
- * execute callack function.
+ * execute callback function.
  *
  * @param {string} url - URL to your script
  * @param {function} callbackFn - callback function
@@ -481,30 +510,36 @@ Helpers.loadScript = function (url, callbackFn, callbackObj) {
 	return false;
 };
 
-Helpers.hasClass = function (elem, c) {
+Helpers.hasClass = function (elem, className) {
+	let elem = elem[0] || elem;
+
 	if ('classList' in document.documentElement) {
-		return elem.classList.contains(c);
+		return elem.classList.contains(className);
 	} else {
-		return Helpers.regExp(c).test(elem.className);
+		return Helpers.regExp(className).test(elem.className);
 	}
 };
 
-Helpers.addClass = function (elem, c) {
+Helpers.addClass = function (elem, className) {
+	let elem = elem[0] || elem;
+
 	if ('classList' in document.documentElement) {
-		elem.classList.add(c);
+		elem.classList.add(className);
 	} else {
-		if (!Helpers.hasClass(elem, c)) {
-			elem.className = elem.className + ' ' + c;
+		if (!Helpers.hasClass(elem, className)) {
+			elem.className = elem.className + ' ' + className;
 		}
 	}
 };
 
-Helpers.removeClass = function (elem, c) {
+Helpers.removeClass = function (elem, className) {
+	let elem = elem[0] || elem;
+
 	if ('classList' in document.documentElement) {
-		elem.classList.remove(c);
+		elem.classList.remove(className);
 	}
 	else {
-		elem.className = elem.className.replace(Helpers.regExp(c), ' ');
+		elem.className = elem.className.replace(Helpers.regExp(className), ' ');
 	}
 };
 
@@ -517,7 +552,7 @@ Helpers.removeClass = function (elem, c) {
  * @param {String} paramName - parameter name
  * @param {(String|Number)} paramValue - parameter value
  *
- * @returns {String} - url
+ * @return {String} - url
  */
 Helpers.addParamToUrl = function (url, paramName, paramValue) {
 	let params = {};
@@ -534,7 +569,7 @@ Helpers.addParamToUrl = function (url, paramName, paramValue) {
  * @param {String} url - url on which parameters should be added / updated
  * @param {Object} params - parameters (name/value)
  *
- * @returns {String} - resulting url
+ * @return {String} - resulting url
  */
 Helpers.updateUrl = function (url, params) {
 	let urlParts = url.split('?');
@@ -580,7 +615,8 @@ Helpers.updateUrl = function (url, params) {
  * Generates alphanumeric id.
  *
  * @param {Number} [length=5] - length of generated id.
- * @returns {String} - generated id
+ *
+ * @return {String} - generated id
  */
 Helpers.makeId = function (length) {
 	let idLength = length || 5;
