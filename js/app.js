@@ -62,7 +62,7 @@ export default (function () {
 	App.clickHandler = Helpers.clickHandler();
 
 	// Versioning
-	App.version = "0.1.0";
+	App.version = "0.0.1";
 
 	// Media Query
 	let head = document.querySelectorAll('head');
