@@ -6,6 +6,8 @@ import Helpers from './utils/helpers';
 import EqualRows from './modules/equal-row-height/equal-row-heights';
 import FormAjax from './modules/form/form-ajax';
 
+// @INSERTPOINT :: @ref: js-import
+
 // Vars
 const $ = App.$;
 
@@ -40,6 +42,9 @@ class Core {
 			// Redirect to page
 			window.location.href = String(obj.url);
 		});
+
+		// @INSERTPOINT :: @ref: js-init-once-v3
+
 	}
 
 	preRender() {
@@ -47,6 +52,7 @@ class Core {
 	}
 
 	render(context) {
+
 
 		/**
 		 * Init AjaxForm
@@ -74,6 +80,9 @@ class Core {
 			},
 			context: context
 		});
+
+		// @INSERTPOINT :: @ref: js-init-v3
+
 	}
 }
 

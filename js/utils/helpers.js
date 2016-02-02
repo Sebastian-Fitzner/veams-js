@@ -336,8 +336,8 @@ Helpers.hasParent = function (e, p) {
  * @return {boolean}
  */
 Helpers.checkElementInContext = function (elem, context) {
-	let currentNode = elem[0] || elem;
-	let contextNode = context[0] || context;
+	let currentNode = elem;
+	let contextNode = context || context;
 
 	while (currentNode.parentNode) {
 		currentNode = currentNode.parentNode;
@@ -359,9 +359,6 @@ Helpers.checkElementInContext = function (elem, context) {
  * @return {boolean}
  */
 Helpers.checkNodeEquality = function (obj1, obj2) {
-	let obj1 = obj1[0] || obj1;
-	let obj2 = obj2[0] || obj2;
-
 	return (obj1 === obj2);
 };
 
@@ -375,7 +372,7 @@ Helpers.checkNodeEquality = function (obj1, obj2) {
  * @return {boolean}
  */
 Helpers.isInViewport = function (elem, useBounds) {
-	let el = elem[0] || elem;
+	let el = elem;
 	let top = el.offsetTop;
 	let left = el.offsetLeft;
 	let width = el.offsetWidth;
@@ -411,7 +408,7 @@ Helpers.isInViewport = function (elem, useBounds) {
  * @return {number}
  */
 Helpers.getOuterHeight = function (elem, outer) {
-	let el = elem[0] || elem;
+	let el = elem;
 	let height = el.offsetHeight;
 
 	if (outer) {
@@ -511,35 +508,35 @@ Helpers.loadScript = function (url, callbackFn, callbackObj) {
 };
 
 Helpers.hasClass = function (elem, className) {
-	let elem = elem[0] || elem;
+	let el = elem;
 
 	if ('classList' in document.documentElement) {
-		return elem.classList.contains(className);
+		return el.classList.contains(className);
 	} else {
-		return Helpers.regExp(className).test(elem.className);
+		return Helpers.regExp(className).test(el.className);
 	}
 };
 
 Helpers.addClass = function (elem, className) {
-	let elem = elem[0] || elem;
+	let el = elem;
 
 	if ('classList' in document.documentElement) {
-		elem.classList.add(className);
+		el.classList.add(className);
 	} else {
-		if (!Helpers.hasClass(elem, className)) {
-			elem.className = elem.className + ' ' + className;
+		if (!Helpers.hasClass(el, className)) {
+			el.className = el.className + ' ' + className;
 		}
 	}
 };
 
 Helpers.removeClass = function (elem, className) {
-	let elem = elem[0] || elem;
+	let el = elem;
 
 	if ('classList' in document.documentElement) {
-		elem.classList.remove(className);
+		el.classList.remove(className);
 	}
 	else {
-		elem.className = elem.className.replace(Helpers.regExp(className), ' ');
+		el.className = el.className.replace(Helpers.regExp(className), ' ');
 	}
 };
 
