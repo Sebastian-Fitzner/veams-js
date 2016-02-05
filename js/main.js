@@ -3,8 +3,6 @@ import App from './core';
 import Helpers from './utils/helpers';
 
 // ES6 Modules
-import EqualRows from './modules/equal-row-height/equal-row-heights';
-import FormAjax from './modules/form/form-ajax';
 
 // @INSERTPOINT :: @ref: js-import
 
@@ -52,35 +50,6 @@ class Core {
 	}
 
 	render(context) {
-
-
-		/**
-		 * Init AjaxForm
-		 */
-		Helpers.loadModule({
-			domName: 'form-ajax',
-			module: FormAjax,
-			render: false,
-			context: context
-		});
-
-		/**
-		 * Init Equal Rows
-		 */
-		Helpers.loadModule({
-			domName: 'equal',
-			module: EqualRows,
-			render: false,
-			cb: function (module, options) {
-				if (options && options.delayInit) {
-					$(window).load(function () {
-						module._reinit(module);
-					});
-				}
-			},
-			context: context
-		});
-
 		// @INSERTPOINT :: @ref: js-init-v3
 
 	}
