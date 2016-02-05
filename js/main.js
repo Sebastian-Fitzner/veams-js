@@ -1,5 +1,5 @@
 // Main Requirements
-import App from './core';
+import App from './app';
 import Helpers from './utils/helpers';
 
 // ES6 Modules
