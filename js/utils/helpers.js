@@ -16,16 +16,14 @@ let Helpers = {};
 // MODULE HELPERS
 // ----------------------------------
 
-
 /**
  * Save/Update DOM references for JS Modules
  *
  *
  */
-Helpers.saveDOM = function () {
+Helpers.saveDOM = function() {
 	Helpers.dataJsModules = Helpers.querySelectorArray('[data-js-module]');
 };
-
 
 /**
  * Initialize a module and render it and/or provide a callback function
@@ -38,29 +36,31 @@ Helpers.saveDOM = function () {
  * @param {Object} [obj.context] - Optional: context of module
  *
  */
-Helpers.loadModule = function (obj) {
+Helpers.loadModule = function(obj) {
 	if (!obj.domName) throw new Error('In order to work with loadModule you need to define the module name (defined in data-js-module attribute) as string! ');
-		if (!obj.module) throw new Error('In order to work with loadModule you need to define a Module!');
+	if (!obj.module) throw new Error('In order to work with loadModule you need to define a Module!');
 
-		let context = obj.context || document.querySelector('html');
-		let renderOnInit = obj.render !== false;
+	let context = obj.context || document.querySelector('html');
+	let renderOnInit = obj.render !== false;
 
-		Helpers.forEach(Helpers.dataJsModules, (i, el) => {
-			if (el.getAttribute('data-js-module') === obj.domName && Helpers.checkElementInContext(el, context)) {
-				let attrs = el.getAttribute('data-js-options');
-				let options = JSON.parse(attrs);
 
-				let module = new obj.module({
-					el: el,
-					options: options
-				});
+	Helpers.forEach(Helpers.dataJsModules, (i, el) => {
+		let dataModules = el.getAttribute('data-js-module').split(' ');
 
-				// Render after initial module loading
-				if (renderOnInit) module.render();
-				// Provide callback function in which you can use module and options
-				if (obj.cb && typeof(obj.cb) === "function") obj.cb(module, options);
-			}
-		});
+		if (dataModules.indexOf(obj.domName) != -1 && Helpers.checkElementInContext(el, context)) {
+			let attrs = el.getAttribute('data-js-options');
+			let options = JSON.parse(attrs);
+			let module = new obj.module({
+				el: el,
+				options: options
+			});
+
+			// Render after initial module loading
+			if (renderOnInit) module.render();
+			// Provide callback function in which you can use module and options
+			if (obj.cb && typeof(obj.cb) === "function") obj.cb(module, options);
+		}
+	});
 };
 
 // ----------------------------------
@@ -103,7 +103,7 @@ Helpers.defaults = function defaults(obj) {
  * @param {Object} from - Mixin object which will be merged via Helpers.defaults with the methods of our class
  * @param {Array} methods - Array of method names which will be extended.
  */
-Helpers.classMixin = function (from, methods = ['initialize', 'render']) {
+Helpers.classMixin = function(from, methods = ['initialize', 'render']) {
 
 	let to = this.prototype;
 
@@ -128,7 +128,7 @@ Helpers.classMixin = function (from, methods = ['initialize', 'render']) {
  * @param {Object} from - methods which comes from mixin
  * @param {string} methodName - function name
  */
-Helpers.extendMethod = function (to, from, methodName) {
+Helpers.extendMethod = function(to, from, methodName) {
 	function isUndefined(value) {
 		return typeof value == 'undefined';
 	}
@@ -138,7 +138,7 @@ Helpers.extendMethod = function (to, from, methodName) {
 		let old = to[methodName];
 
 		// ... we create a new function on to
-		to[methodName] = function () {
+		to[methodName] = function() {
 
 			// wherein we first call the method which exists on `to`
 			let oldReturn = old.apply(this, arguments);
@@ -165,7 +165,7 @@ Helpers.extendMethod = function (to, from, methodName) {
  *
  * @return {Array}
  */
-Helpers.querySelectorArray = Helpers.$ = function (elem, context) {
+Helpers.querySelectorArray = Helpers.$ = function(elem, context) {
 	if (!elem) throw new Error('In order to work with querySelectorArray you need to define an element as string!');
 	let el = elem;
 	let customContext = context || document;
@@ -180,7 +180,7 @@ Helpers.querySelectorArray = Helpers.$ = function (elem, context) {
  * @param {function} callback - callback function
  * @param {string} scope - scope of function
  */
-Helpers.forEach = function (array, callback, scope) {
+Helpers.forEach = function(array, callback, scope) {
 	for (let i = 0; i < array.length; i++) {
 		callback.call(scope, i, array[i]);
 	}
@@ -192,7 +192,7 @@ Helpers.forEach = function (array, callback, scope) {
  * @param {Array} array - array in which we search for
  * @param {Object} item - item which will be searched
  */
-Helpers.indexOf = function (array, item) {
+Helpers.indexOf = function(array, item) {
 	if (array == null) return -1;
 	let l;
 	let i;
@@ -209,7 +209,7 @@ Helpers.indexOf = function (array, item) {
  *
  * @return {RegExp}
  */
-Helpers.regExp = function (regEx) {
+Helpers.regExp = function(regEx) {
 	return new RegExp("(^|\\s+)" + regEx + "(\\s+|$)");
 };
 
@@ -221,14 +221,14 @@ Helpers.regExp = function (regEx) {
  * @param {boolean} immediate - execute function immediately.
  */
 
-Helpers.throttle = function (func, wait, immediate) {
+Helpers.throttle = function(func, wait, immediate) {
 	let timeout;
 
-	return function () {
+	return function() {
 		let context = this;
 		let args = arguments;
 		let callNow = immediate && !timeout;
-		let later = function () {
+		let later = function() {
 			timeout = null;
 			if (!immediate) func.apply(context, args);
 		};
@@ -248,14 +248,14 @@ Helpers.throttle = function (func, wait, immediate) {
 /**
  * Touch Detection
  */
-Helpers.isTouch = function () {
+Helpers.isTouch = function() {
 	return 'ontouchstart' in window;
 };
 
 /**
  * Detect transitionend event.
  */
-Helpers.transitionEndEvent = function () {
+Helpers.transitionEndEvent = function() {
 	let t;
 	let el = document.createElement('fakeelement');
 	let transitions = {
@@ -275,7 +275,7 @@ Helpers.transitionEndEvent = function () {
 /**
  * Detect animationend event.
  */
-Helpers.animationEndEvent = function () {
+Helpers.animationEndEvent = function() {
 	let t;
 	let el = document.createElement('fakeelement');
 	let animations = {
@@ -297,13 +297,13 @@ Helpers.animationEndEvent = function () {
  *
  * @return {function}
  */
-Helpers.requestAniFrame = function () {
+Helpers.requestAniFrame = function() {
 	return window.requestAnimationFrame ||
-			window.webkitRequestAnimationFrame ||
-			window.mozRequestAnimationFrame ||
-			function (callback) {
-				window.setTimeout(callback, 1000 / 60);
-			};
+		window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame ||
+		function(callback) {
+			window.setTimeout(callback, 1000 / 60);
+		};
 };
 
 // ----------------------------------
@@ -316,7 +316,7 @@ Helpers.requestAniFrame = function () {
  * Todo: merge with checkElementInContext
  * @return {boolean}
  */
-Helpers.hasParent = function (e, p) {
+Helpers.hasParent = function(e, p) {
 	if (!e) return false;
 	let el = e.target || e.srcElement || e || false;
 	while (el && el != p) {
@@ -335,7 +335,7 @@ Helpers.hasParent = function (e, p) {
  *
  * @return {boolean}
  */
-Helpers.checkElementInContext = function (elem, context) {
+Helpers.checkElementInContext = function(elem, context) {
 	let currentNode = elem;
 	let contextNode = context || context;
 
@@ -358,7 +358,7 @@ Helpers.checkElementInContext = function (elem, context) {
  *
  * @return {boolean}
  */
-Helpers.checkNodeEquality = function (obj1, obj2) {
+Helpers.checkNodeEquality = function(obj1, obj2) {
 	return (obj1 === obj2);
 };
 
@@ -371,7 +371,7 @@ Helpers.checkNodeEquality = function (obj1, obj2) {
  *
  * @return {boolean}
  */
-Helpers.isInViewport = function (elem, useBounds) {
+Helpers.isInViewport = function(elem, useBounds) {
 	let el = elem;
 	let top = el.offsetTop;
 	let left = el.offsetLeft;
@@ -407,7 +407,7 @@ Helpers.isInViewport = function (elem, useBounds) {
  *
  * @return {number}
  */
-Helpers.getOuterHeight = function (elem, outer) {
+Helpers.getOuterHeight = function(elem, outer) {
 	let el = elem;
 	let height = el.offsetHeight;
 
@@ -424,11 +424,11 @@ Helpers.getOuterHeight = function (elem, outer) {
  * @param {Object} obj - Contains all properties
  * @param {string} obj.templateName - Defines the template name which is a selector from the element
  */
-Helpers.templatizer = function (obj) {
+Helpers.templatizer = function(obj) {
 	if (!'content' in document.createElement('template')) return;
 	if (!obj && !obj.templateName) throw new Error('You need to pass a template namespace as string!');
 
-	Helpers.querySelectorArray(obj.templateName).forEach(function (tpl) {
+	Helpers.querySelectorArray(obj.templateName).forEach(function(tpl) {
 		let parent = tpl.parentNode;
 		let content = tpl.content.children[0];
 
@@ -445,7 +445,7 @@ Helpers.templatizer = function (obj) {
  *
  * @return {string}
  */
-Helpers.clickHandler = function () {
+Helpers.clickHandler = function() {
 	return Helpers.isTouch() ? 'touchstart' : 'click';
 };
 
@@ -457,7 +457,7 @@ Helpers.clickHandler = function () {
  *
  * @return {boolean}
  */
-Helpers.checkScript = function (url) {
+Helpers.checkScript = function(url) {
 	let x = document.getElementsByTagName("script");
 	let scriptAdded = false;
 
@@ -479,7 +479,7 @@ Helpers.checkScript = function (url) {
  * @param {function} callbackFn - callback function
  * @param {Object} callbackObj - this context
  */
-Helpers.loadScript = function (url, callbackFn, callbackObj) {
+Helpers.loadScript = function(url, callbackFn, callbackObj) {
 	let scriptAdded = Helpers.checkScript(url);
 	let script;
 
@@ -493,12 +493,12 @@ Helpers.loadScript = function (url, callbackFn, callbackObj) {
 		if (scriptAdded === true) {
 			callbackFn.apply(callbackObj);
 		} else {
-			script.onreadystatechange = function () {
+			script.onreadystatechange = function() {
 				if (x.readyState == 'complete') {
 					callbackFn.apply(callbackObj);
 				}
 			};
-			script.onload = function () {
+			script.onload = function() {
 				callbackFn.apply(callbackObj);
 			};
 		}
@@ -507,7 +507,7 @@ Helpers.loadScript = function (url, callbackFn, callbackObj) {
 	return false;
 };
 
-Helpers.hasClass = function (elem, className) {
+Helpers.hasClass = function(elem, className) {
 	let el = elem;
 
 	if ('classList' in document.documentElement) {
@@ -517,7 +517,7 @@ Helpers.hasClass = function (elem, className) {
 	}
 };
 
-Helpers.addClass = function (elem, className) {
+Helpers.addClass = function(elem, className) {
 	let el = elem;
 
 	if ('classList' in document.documentElement) {
@@ -529,7 +529,7 @@ Helpers.addClass = function (elem, className) {
 	}
 };
 
-Helpers.removeClass = function (elem, className) {
+Helpers.removeClass = function(elem, className) {
 	let el = elem;
 
 	if ('classList' in document.documentElement) {
@@ -551,7 +551,7 @@ Helpers.removeClass = function (elem, className) {
  *
  * @return {String} - url
  */
-Helpers.addParamToUrl = function (url, paramName, paramValue) {
+Helpers.addParamToUrl = function(url, paramName, paramValue) {
 	let params = {};
 
 	params[paramName] = paramValue;
@@ -568,7 +568,7 @@ Helpers.addParamToUrl = function (url, paramName, paramValue) {
  *
  * @return {String} - resulting url
  */
-Helpers.updateUrl = function (url, params) {
+Helpers.updateUrl = function(url, params) {
 	let urlParts = url.split('?');
 	let tmpParams = [];
 	let originalParams = [];
@@ -615,7 +615,7 @@ Helpers.updateUrl = function (url, params) {
  *
  * @return {String} - generated id
  */
-Helpers.makeId = function (length) {
+Helpers.makeId = function(length) {
 	let idLength = length || 5;
 	let charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 	let i = 0;
