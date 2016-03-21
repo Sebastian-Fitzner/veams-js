@@ -24,4 +24,6 @@ const EVENTS = {
 	uiOverlayClose: 'uiOverlay:populate'
 };
 
+// @INSERTPOINT :: @ref: js-events
+
 export default EVENTS;
