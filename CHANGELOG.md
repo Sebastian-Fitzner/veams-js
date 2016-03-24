@@ -1,3 +1,7 @@
+### v3.0.11
+- don't ignore `README.md`
+- added insert snippet
+
 ### v3.0.9
 - removed custom module events (only keep global events)
 
