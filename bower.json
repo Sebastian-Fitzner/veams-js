@@ -4,8 +4,7 @@
 	"ignore": [
 		"demo",
 		".gitignore",
-		"bower.json",
-		"README.md"
+		"bower.json"
 	],
 	"authors": [
 		{
