@@ -64,6 +64,21 @@ export default (function () {
 	// Versioning
 	App.version = "0.0.1";
 
+	// Global module registry
+	App.modules = {};
+
+	// Add module to global registry
+	App.registerModule = function (module) {
+
+		if (!App.modules[module.name]) {
+			App.modules[module.name] = module;
+
+			App.Vent.trigger(App.EVENTS.moduleRegistered, {
+				module: module
+			});
+		}
+	};
+
 	// Media Query
 	let head = document.querySelectorAll('head');
 	App.currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');

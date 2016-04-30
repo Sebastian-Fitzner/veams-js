@@ -1,3 +1,6 @@
+### v3.1.0
+- added global module registry
+
 ### v3.0.11
 - don't ignore `README.md`
 - added insert snippet

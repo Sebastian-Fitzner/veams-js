@@ -12,6 +12,7 @@ const EVENTS = {
 	DOMchanged: 'DOMchanged',
 	DOMredirect: 'dom:redirect',
 	mediachange: 'mediachange',
+	moduleRegistered: 'moduleRegistered',
 	resize: 'resize',
 	scroll: 'scroll'
 };
