@@ -1,3 +1,6 @@
+### v3.1.1
+- added node to global module registry
+
 ### v3.1.0
 - added global module registry
 

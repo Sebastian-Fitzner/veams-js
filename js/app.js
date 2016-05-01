@@ -68,15 +68,19 @@ export default (function () {
 	App.modules = {};
 
 	// Add module to global registry
-	App.registerModule = function (module) {
-
+	App.registerModule = function (module, el) {
 		if (!App.modules[module.name]) {
 			App.modules[module.name] = module;
-
-			App.Vent.trigger(App.EVENTS.moduleRegistered, {
-				module: module
-			});
+			App.modules[module.name].nodes = [el];
 		}
+		else {
+			App.modules[module.name].nodes.push(el);
+		}
+
+		App.Vent.trigger(App.EVENTS.moduleRegistered, {
+			module: module,
+			el: el
+		});
 	};
 
 	// Media Query
