@@ -13,6 +13,8 @@ const EVENTS = {
 	DOMredirect: 'dom:redirect',
 	mediachange: 'mediachange',
 	moduleRegistered: 'moduleRegistered',
+	mouseEnter: 'mouseenter',
+	mouseLeave: 'mouseleave',
 	resize: 'resize',
 	scroll: 'scroll'
 };
