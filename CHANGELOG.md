@@ -1,5 +1,8 @@
+### v3.1.3
+- added some global standard events
+
 ### v3.1.2
-- added mouseEnter and mouseLeave events
+- added mouseenter and mouseleave events
 
 ### v3.1.1
 - added node to global module registry
