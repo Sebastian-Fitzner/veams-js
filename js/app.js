@@ -97,24 +97,57 @@ export default (function () {
 	// CHECKING
 	// ----------------------------------
 
-	// disable devmode logging if not on ie9 and parameter "devmode" not present
-	if (document.querySelectorAll('html')[0].className.indexOf('ie9') < 0) {
-		if (document.location.search.indexOf('devmode') < 0) {
-			// hide all warnings and logs if not in devmode
-			console.log = console.warn = function () {
-			};
-		} else {
-			App.devmode = true;
-		}
+
+	if (document.location.search.indexOf('devmode') > -1) {
+		App.devmode = true;
 	}
-	else {
-		// IE9 FIX: in ie9 window.console seems to be undefined until you open dev tools
-		if (!window.console) {
-			window.console = {};
-			console.log = console.warn = function () {
-			};
-		}
+
+	if (document.location.search.indexOf('logger') > -1) {
+		App.logger = true;
 	}
+
+	// hide all warnings and logs if not in devmode
+	if (!App.devmode) {
+		console.log = console.warn = function () {
+		};
+	}
+
+	// add console output element (triggered by parameter 'devmode' and 'logger' in url)
+	if (App.devmode && App.logger) {
+		let logger = document.createElement('pre');
+
+		logger.setAttribute('id', 'logger');
+		document.body.appendChild(logger);
+
+		console.write = function () {
+			for (let i = 0; i < arguments.length; i++) {
+				if (typeof arguments[i] == 'object') {
+					logger.innerHTML += (JSON && JSON.stringify ? JSON.stringify(arguments[i], undefined, 2) : arguments[i]) + '<br />';
+				} else {
+					logger.innerHTML += arguments[i] + '<br />';
+				}
+			}
+
+			logger.innerHTML += '<br />';
+			logger.scrollTop = logger.scrollHeight;
+		};
+
+		console.error = function () {
+			logger.innerHTML += '[Error]<br />';
+			console.write.apply(this, arguments);
+		};
+
+		console.warn = function () {
+			logger.innerHTML += '[Warn]<br />';
+			console.write.apply(this, arguments);
+		};
+
+		console.log = function () {
+			logger.innerHTML += '[Log]<br />';
+			console.write.apply(this, arguments);
+		};
+	}
+
 
 	// ----------------------------------
 	// GLOBAL EVENTS

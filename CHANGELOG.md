@@ -1,3 +1,6 @@
+### v3.2.0
+- add logger (console output element)
+
 ### v3.1.3
 - added some global standard events
 
