@@ -1,3 +1,6 @@
+### v3.3.0
+- add helper function getParamFromUrl
+
 ### v3.2.0
 - add logger (console output element)
 
