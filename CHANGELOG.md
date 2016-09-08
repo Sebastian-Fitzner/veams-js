@@ -1,3 +1,8 @@
+### v3.4.0
+- remove function addParamToUrl
+- add polyfill for CustomEvent
+- add function detectSwipes
+
 ### v3.3.0
 - add helper function getParamFromUrl
 
@@ -5,23 +10,23 @@
 - add logger (console output element)
 
 ### v3.1.3
-- added some global standard events
+- add some global standard events
 
 ### v3.1.2
-- added mouseenter and mouseleave events
+- add mouseenter and mouseleave events
 
 ### v3.1.1
-- added node to global module registry
+- add node to global module registry
 
 ### v3.1.0
 - added global module registry
 
 ### v3.0.11
 - don't ignore `README.md`
-- added insert snippet
+- add insert snippet
 
 ### v3.0.9
-- removed custom module events (only keep global events)
+- remove custom module events (only keep global events)
 
 ### v3.0.8
-- added INSERTPOINT to events.js
+- add INSERTPOINT to events.js

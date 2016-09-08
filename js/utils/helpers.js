@@ -3,9 +3,15 @@
  * @module Helper
  *
  * @author Sebastian Fitzner
+ * @author Andy Gutsche
  */
 
 "use strict";
+
+/**
+ * Imports
+ */
+import './polyfills/custom-event';
 
 /**
  * @alias module:Helper
@@ -542,25 +548,6 @@ Helpers.removeClass = function(elem, className) {
 
 
 /**
- * Add/Update a parameter for given url
- *
- * @deprecated use Helpers.updateUrl instead
- * @param {String} url - url on which the parameter should be added / updated
- * @param {String} paramName - parameter name
- * @param {(String|Number)} paramValue - parameter value
- *
- * @return {String} - url
- */
-Helpers.addParamToUrl = function(url, paramName, paramValue) {
-	let params = {};
-
-	params[paramName] = paramValue;
-
-	return Helpers.updateUrl(url, params);
-};
-
-
-/**
  * Add/Update multiple parameters for given url
  *
  * @param {String} url - url on which parameters should be added / updated
@@ -633,9 +620,9 @@ Helpers.getParamFromUrl = function (url, param) {
 
 
 /**
- * Generates alphanumeric id.
+ * Generates alphanumeric id
  *
- * @param {Number} [length=5] - length of generated id.
+ * @param {Number} [length=5] - length of generated id
  *
  * @return {String} - generated id
  */
@@ -649,6 +636,75 @@ Helpers.makeId = function(length) {
 		id += charPool.charAt(Math.floor(Math.random() * charPool.length));
 
 	return id;
+};
+
+
+/**
+ * Detect swipe gestures
+ *
+ * @param {Object} el - element to detect swipes on
+ * @param {Number} threshold - threshold for swipe (in px)
+ */
+Helpers.detectSwipe = function (el, threshold) {
+	let touchstartX = 0;
+	let touchstartY = 0;
+	let touchendX = 0;
+	let touchendY = 0;
+	let swipeThreshold = threshold || 0;
+
+	function handleSwipe() {
+		let deltaX = Math.abs(touchstartX - touchendX);
+		let deltaY = Math.abs(touchstartY - touchendY);
+
+		if (deltaX > swipeThreshold) {
+			if (touchendX < touchstartX) {
+				el.dispatchEvent(new CustomEvent('swipe', {
+					detail: {
+						direction: 'left'
+					}
+				}));
+			}
+
+			if (touchendX > touchstartX) {
+				el.dispatchEvent(new CustomEvent('swipe', {
+					detail: {
+						direction: 'right'
+					}
+				}));
+			}
+		}
+
+		if (deltaY > swipeThreshold) {
+			if (touchendY < touchstartY) {
+				el.dispatchEvent(new CustomEvent('swipe', {
+					detail: {
+						direction: 'up'
+					}
+				}));
+			}
+
+			if (touchendY > touchstartY) {
+				el.dispatchEvent(new CustomEvent('swipe', {
+					detail: {
+						direction: 'down'
+					}
+				}));
+			}
+		}
+	}
+
+	el.addEventListener('touchstart', function (e) {
+		touchstartX = e.touches[0].clientX;
+		touchstartY = e.touches[0].clientY;
+	}, false);
+
+	el.addEventListener('touchend', function (e) {
+		touchendX = e.changedTouches[0].clientX;
+		touchendY = e.changedTouches[0].clientY;
+
+		handleSwipe();
+
+	}, false);
 };
 
 export default Helpers;
