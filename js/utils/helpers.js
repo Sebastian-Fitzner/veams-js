@@ -620,22 +620,22 @@ Helpers.getParamFromUrl = function (url, param) {
 
 
 /**
- * Generates alphanumeric id
+ * Generates numeric id.
  *
- * @param {Number} [length=5] - length of generated id
+ * @param {Number} [segments=1] - number of segments of generated id (segments consist of 10 digits, separated by '-').
  *
  * @return {String} - generated id
  */
-Helpers.makeId = function(length) {
-	let idLength = length || 5;
-	let charPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	let i = 0;
+Helpers.makeId = function (segments = 1) {
+	let array = window.crypto.getRandomValues(new Uint32Array(segments));
 	let id = '';
+	let i = 0 ;
 
-	for (; i < idLength; i++)
-		id += charPool.charAt(Math.floor(Math.random() * charPool.length));
+	for (; i < array.length; i++) {
+		id += array[i] + '-';
+	}
 
-	return id;
+	return id.slice(0, -1);
 };
 
 

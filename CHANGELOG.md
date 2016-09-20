@@ -1,3 +1,6 @@
+### v3.5.0
+- use real random values (crypto) for Helpers.makeId
+
 ### v3.4.1
 - add swipe event
 
