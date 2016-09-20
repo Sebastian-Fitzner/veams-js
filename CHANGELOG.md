@@ -1,3 +1,6 @@
+### v3.4.1
+- add swipe event
+
 ### v3.4.0
 - remove function addParamToUrl
 - add polyfill for CustomEvent

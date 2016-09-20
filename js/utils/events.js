@@ -9,28 +9,29 @@
  */
 
 const EVENTS = {
-	DOMchanged: 'DOMchanged',
-	DOMredirect: 'dom:redirect',
-	mediachange: 'mediachange',
-	moduleRegistered: 'moduleRegistered',
-	mouseenter: 'mouseenter',
-	mouseleave: 'mouseleave',
-	mouseover: 'mouseover',
-	mouseout: 'mouseout',
-	mouseup: 'mouseup',
-	mousedown: 'mousedown',
-	resize: 'resize',
-	scroll: 'scroll',
+	blur: 'blur',
+	change: 'change',
 	click: 'click',
 	dblclick: 'dblclick',
-	change: 'change',
+	DOMchanged: 'DOMchanged',
+	DOMredirect: 'dom:redirect',
 	input: 'input',
-	blur: 'blur',
-	submit: 'submit',
-	reset: 'reset',
-	keyup: 'keyup',
 	keydown: 'keydown',
-	keypress: 'keypress'
+	keypress: 'keypress',
+	keyup: 'keyup',
+	mediachange: 'mediachange',
+	moduleRegistered: 'moduleRegistered',
+	mousedown: 'mousedown',
+	mouseenter: 'mouseenter',
+	mouseleave: 'mouseleave',
+	mouseout: 'mouseout',
+	mouseover: 'mouseover',
+	mouseup: 'mouseup',
+	reset: 'reset',
+	resize: 'resize',
+	scroll: 'scroll',
+	submit: 'submit',
+	swipe: 'swipe'
 };
 
 // @INSERTPOINT :: @ref: js-events
