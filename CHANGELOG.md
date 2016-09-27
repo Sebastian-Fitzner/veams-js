@@ -1,3 +1,6 @@
+### v3.6.0
+- add DOM-Helper
+
 ### v3.5.0
 - use real random values (crypto) for Helpers.makeId
 
