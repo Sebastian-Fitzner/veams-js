@@ -1,3 +1,6 @@
+### v3.8.0
+- remove addClass, removeClass and hasClass from Helpers
+
 ### v3.7.0
 - improve DOM-Helper (update selector function)
 - extend DOM-Helper (add event handling)

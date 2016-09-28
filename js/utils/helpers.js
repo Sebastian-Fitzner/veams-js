@@ -513,39 +513,6 @@ Helpers.loadScript = function(url, callbackFn, callbackObj) {
 	return false;
 };
 
-Helpers.hasClass = function(elem, className) {
-	let el = elem;
-
-	if ('classList' in document.documentElement) {
-		return el.classList.contains(className);
-	} else {
-		return Helpers.regExp(className).test(el.className);
-	}
-};
-
-Helpers.addClass = function(elem, className) {
-	let el = elem;
-
-	if ('classList' in document.documentElement) {
-		el.classList.add(className);
-	} else {
-		if (!Helpers.hasClass(el, className)) {
-			el.className = el.className + ' ' + className;
-		}
-	}
-};
-
-Helpers.removeClass = function(elem, className) {
-	let el = elem;
-
-	if ('classList' in document.documentElement) {
-		el.classList.remove(className);
-	}
-	else {
-		el.className = el.className.replace(Helpers.regExp(className), ' ');
-	}
-};
-
 
 /**
  * Add/Update multiple parameters for given url
