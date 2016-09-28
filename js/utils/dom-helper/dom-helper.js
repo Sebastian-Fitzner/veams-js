@@ -172,6 +172,8 @@ DOMWrapper.prototype.addClass = function (classNames) {
 		}
 
 	}
+
+	return this;
 };
 
 
@@ -207,6 +209,8 @@ DOMWrapper.prototype.removeClass = function (classNames) {
 			}
 		}
 	}
+
+	return this;
 };
 
 

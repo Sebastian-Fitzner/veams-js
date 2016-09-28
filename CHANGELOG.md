@@ -1,9 +1,12 @@
+### v3.8.1
+- DOM-Helper: add support for chaining of addClass and removeClass
+
 ### v3.8.0
 - remove addClass, removeClass and hasClass from Helpers
 
 ### v3.7.0
-- improve DOM-Helper (update selector function)
-- extend DOM-Helper (add event handling)
+- DOM-Helper: improve selector function
+- DOM-Helper: add event handling
 
 ### v3.6.0
 - add DOM-Helper
