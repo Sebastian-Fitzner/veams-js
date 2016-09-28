@@ -1,3 +1,7 @@
+### v3.7.0
+- improve DOM-Helper (update selector function)
+- extend DOM-Helper (add event handling)
+
 ### v3.6.0
 - add DOM-Helper
 

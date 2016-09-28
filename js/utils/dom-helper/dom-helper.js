@@ -5,8 +5,6 @@
  * @author Andy Gutsche
  */
 
-"use strict";
-
 let DOMHelper = function (selector, context) {
 	return new DOMWrapper(selector, context);
 };
@@ -29,6 +27,53 @@ DOMHelper.parseHTML = function (htmlString) {
 
 
 /**
+ * Send XMLHttpRequest
+ *
+ * @param {Object} obj - options
+ * @param {String} [obj.type='GET'] - an alias for method
+ * @param {String} obj.url - a string containing the URL to which the request is sent
+ * @param {String} [obj.dataType='text'] - a string containing the URL to which the request is sent
+ */
+DOMHelper.ajax = function (obj) {
+	let options = {
+		type: obj.type || 'GET',
+		url: obj.url,
+		dataType: obj.dataType || 'text',
+		success: obj.success || function () {
+		},
+		error: obj.error || function () {
+		},
+	};
+
+	let request = new XMLHttpRequest();
+	request.open(options.type, options.url, true);
+
+	request.onload = function () {
+		if (request.status >= 200 && request.status < 400) {
+			let response;
+
+			if (options.dataType === 'json') {
+				response = JSON.parse(request.responseText);
+			}
+			else {
+				response = request.responseText;
+			}
+
+			options.success(response);
+		} else {
+			options.error(request.status, request.statusText)
+		}
+	};
+
+	request.onerror = function (e) {
+		options.error(e.target.status);
+	};
+
+	request.send();
+};
+
+
+/**
  * DOM Wrapper
  *
  * @param {String} selector - selector
@@ -36,6 +81,20 @@ DOMHelper.parseHTML = function (htmlString) {
  */
 let DOMWrapper = function (selector, context) {
 	let scope;
+
+	// console.log('selector: ', selector);
+
+	if (selector.nodeType) {
+		this.nodeList = [selector];
+
+		return;
+	}
+
+	if (selector.nodeList) {
+		this.nodeList = selector.nodeList;
+
+		return;
+	}
 
 	this.classListSupport = 'classList' in document.documentElement;
 
@@ -392,7 +451,73 @@ DOMWrapper.prototype.clone = function (withChildren) {
  * @return {Number} - index of element among its siblings
  */
 DOMWrapper.prototype.index = function () {
-	return [].slice.call(this.nodeList[0].parentNode.children).indexOf(this.nodeList[0])
+	return [].slice.call(this.nodeList[0].parentNode.children).indexOf(this.nodeList[0]);
+};
+
+
+/**
+ * Attach an event handler function for one or more events to the selected elements
+ *
+ * @param {String} eventNames - name(s) of event(s) for which handler will be registered for the matched set of elements
+ * @param {Function} handler - event handler function to register
+ */
+DOMWrapper.prototype.on = function (eventNames, handler) {
+	let i = 0;
+	let j = 0;
+	let events = eventNames.split(' ');
+
+	for (i; i < this.nodeList.length; i++) {
+
+		for (j; j < events.length; j++) {
+			this.nodeList[i].addEventListener(events[j], handler);
+		}
+	}
+};
+
+
+/**
+ * Detach an event handler for one or more events from the selected elements
+ *
+ * @param {String} eventNames - name(s) of event(s) for which handler will be unregistered for the matched set of elements
+ * @param {Function} handler - event handler function to unregister
+ */
+DOMWrapper.prototype.off = function (eventNames, handler) {
+	let i = 0;
+	let j = 0;
+	let events = eventNames.split(' ');
+
+	for (i; i < this.nodeList.length; i++) {
+
+		for (j; j < events.length; j++) {
+			this.nodeList[i].removeEventListener(events[j], handler);
+		}
+	}
+};
+
+
+/**
+ * Execute all handlers and behaviors attached to the matched elements for the given event type
+ *
+ * @param {String} eventNames - name(s) of event(s) which will be trigger on the set of matched elements
+ * @param {Object} [customData] - custom data to pass with the event (accessible via event.detail)
+ */
+DOMWrapper.prototype.trigger = function (eventNames, customData) {
+	let i = 0;
+	let j = 0;
+	let events = eventNames.split(' ');
+
+	for (i; i < this.nodeList.length; i++) {
+
+		for (j; j < events.length; j++) {
+
+			if (typeof this.nodeList[i][events[j]] === 'function') {
+				this.nodeList[i][events[j]]();
+			}
+			else {
+				this.nodeList[i].dispatchEvent(new CustomEvent(events[j], {detail: customData}));
+			}
+		}
+	}
 };
 
 
