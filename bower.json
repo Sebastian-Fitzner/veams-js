@@ -1,6 +1,6 @@
 {
 	"name": "veams-js",
-	"version": "3.8.1",
+	"version": "3.6.0",
 	"ignore": [
 		"demo",
 		".gitignore",
