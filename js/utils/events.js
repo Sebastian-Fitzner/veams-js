@@ -15,6 +15,7 @@ const EVENTS = {
 	dblclick: 'dblclick',
 	DOMchanged: 'DOMchanged',
 	DOMredirect: 'dom:redirect',
+	hashchange: 'hashchange',
 	input: 'input',
 	keydown: 'keydown',
 	keypress: 'keypress',

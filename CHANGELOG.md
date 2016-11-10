@@ -1,3 +1,6 @@
+### v3.6.1
+- add hashchange event
+
 ### v3.6.0
 - remove addClass, removeClass and hasClass from Helpers
 
