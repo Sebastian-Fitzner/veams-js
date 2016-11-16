@@ -1,35 +1,52 @@
-var libs = [
-	'jquery',
+var externalLibs = [
 	'exoskeleton',
-	// 'backbone',
-	'underscore',
-	// 'backbone.touch',
+	'handlebars',
 	'respimage',
-	'touchswipe',
-	'handlebars/runtime',
-	'document-register-element'
+	'./resources/js/vendor/veams-query/veams-query.js:veams-query'
+];
+
+var internalLibs = [
+	'./resources/js/utils/events.js:events',
+	'./resources/js/app.js:app',
+	'./resources/js/modules/_global/module.js:app-module'
 ];
 
 module.exports = {
 	options: {
 		transform: [
-			["babelify", {"stage": 0}]
-		]
+			['babelify',
+				{
+					compact: true,
+					// ignore: [
+					// 	'<%= paths.dev %>/js/vendor/'
+					// ],
+					presets: ['es2015', 'stage-0']
+				}
+			],
+			['aliasify',
+				{
+					aliases: {
+						'backbone': 'exoskeleton'
+					},
+					global: true,
+					verbose: true
+				}
+			]
+		],
+		ignore: ['jquery', 'underscore']
 	},
 	vendor: {
 		src: ['.'],
 		dest: '<%= paths.dev %>/js/vendor/libs.js',
 		options: {
 			debug: false,
-			alias: libs,
-			external: [
-				'underscore'
-			]  // Reset this here because it's not needed
+			alias: externalLibs
 		}
 	},
 	dev: {
 		options: {
-			external: libs,
+			alias: internalLibs,
+			external: externalLibs,
 			browserifyOptions: {
 				debug: true
 			},
@@ -40,6 +57,10 @@ module.exports = {
 		}
 	},
 	dist: {
+		options: {
+			alias: internalLibs,
+			external: externalLibs
+		},
 		files: {
 			'<%= paths.dev %>/js/main.js': '<%= paths.src %>/js/main.js'
 		}
