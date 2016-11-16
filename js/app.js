@@ -1,8 +1,11 @@
 import Helpers from './utils/helpers';
-import EVENTS from './utils/events';
+import EVENTS from 'events';
+import { default as VeamsQuery } from 'veams-query';
 
-const $ = require('jquery');
+const $ = VeamsQuery;
 const Exoskeleton = require('exoskeleton');
+Exoskeleton.View = require('backbone.nativeview');
+Exoskeleton.ajax = require('backbone.nativeajax');
 
 require('respimage');
 
@@ -27,12 +30,14 @@ export default (function () {
 	App.Exoskeleton = Exoskeleton;
 	App.$ = $;
 	App.EVENTS = EVENTS;
+	App.Helpers = Helpers;
 
 	/**
 	 * Create custom view with own properties and
 	 * take this view in our modules
 	 * register only one reference to our global library Exoskeleton
 	 */
+
 	App.ComponentView = function (options) {
 		Exoskeleton.View.call(this, options);
 	};
