@@ -1,12 +1,12 @@
 // Main Requirements
-import App from './app';
-import Helpers from './utils/helpers';
+import App from 'app';
 
 // ES6 Modules
 
 // @INSERTPOINT :: @ref: js-import
 
 // Vars
+const Helpers = App.Helpers;
 const $ = App.$;
 
 'use strict';
