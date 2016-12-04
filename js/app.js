@@ -7,7 +7,7 @@ const Exoskeleton = require('exoskeleton');
 Exoskeleton.View = require('backbone.nativeview');
 Exoskeleton.ajax = require('backbone.nativeajax');
 
-require('respimage');
+require('picturefill');
 
 export default (function () {
 	'use strict';
