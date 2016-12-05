@@ -1,13 +1,14 @@
 import Helpers from './utils/helpers';
 import EVENTS from 'events';
 import { default as VeamsQuery } from 'veams-query';
+require('picturefill');
+require('lazysizes');
 
 const $ = VeamsQuery;
 const Exoskeleton = require('exoskeleton');
+
 Exoskeleton.View = require('backbone.nativeview');
 Exoskeleton.ajax = require('backbone.nativeajax');
-
-require('picturefill');
 
 export default (function () {
 	'use strict';
