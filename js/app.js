@@ -164,14 +164,14 @@ export default (function () {
 	 */
 
 	// Trigger global resize event
-	window.onresize = function (e) {
+	window.onresize = Helpers.throttle(function (e) {
 		let currentMedia = window.getComputedStyle(head[0], null).getPropertyValue('font-family');
 		let width = window.innerWidth;
 
 		if (currentMedia !== App.currentMedia) {
 			let oldMedia = App.currentMedia;
-
 			App.currentMedia = currentMedia;
+
 			console.log('App.currentMedia: ', App.currentMedia);
 
 			App.Vent.trigger(App.EVENTS.mediachange, {
@@ -185,11 +185,12 @@ export default (function () {
 			App.screenSize.width = width;
 			App.Vent.trigger(App.EVENTS.resize, e);
 		}
-	};
+	}, 300);
 
-	document.onscroll = function (e) {
+
+	document.onscroll = Helpers.throttle(function (e) {
 		App.Vent.trigger(App.EVENTS.scroll, e);
-	};
+	}, 200);
 
 	return App;
 
