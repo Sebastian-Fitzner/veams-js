@@ -40,6 +40,7 @@ Helpers.saveDOM = function() {
  * @param {boolean} [obj.render=true] - Optional: render the class, if false the class will only be initialized
  * @param {function} [obj.cb] - Optional: provide a function which will be executed after initialisation
  * @param {Object} [obj.context] - Optional: context of module
+ * @param {Object} [obj.options] - Optional: You can pass options to the module via JS (Useful for DOMChanged)
  *
  */
 Helpers.loadModule = function(obj) {
@@ -56,6 +57,7 @@ Helpers.loadModule = function(obj) {
 		if (dataModules.indexOf(obj.domName) != -1 && Helpers.checkElementInContext(el, context)) {
 			let attrs = el.getAttribute('data-js-options');
 			let options = JSON.parse(attrs);
+			options = Helpers.defaults(obj.options || {}, options);
 			let module = new obj.module({
 				el: el,
 				options: options

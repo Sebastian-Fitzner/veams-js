@@ -49,7 +49,7 @@ class Core {
 		Helpers.saveDOM();
 	}
 
-	render(context) {
+	render(context, options) {
 		// @INSERTPOINT :: @ref: js-init-v3
 
 	}
@@ -68,9 +68,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	 * Initialize modules which are loaded after initial load
 	 * via custom event 'DOMchanged'
 	 */
-	App.Vent.on(App.EVENTS.DOMchanged, (context) => {
+	App.Vent.on(App.EVENTS.DOMchanged, (context, options) => {
 		console.log('Dom has changed. Initialising new modules in: ', context);
 		core.preRender();
-		core.render(context);
+		core.render(context, options);
 	});
 });
