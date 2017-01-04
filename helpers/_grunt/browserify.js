@@ -3,7 +3,7 @@ var externalLibs = [
 	'handlebars',
 	'picturefill',
 	'lazysizes',
-	'./resources/js/vendor/veams-query/veams-query.js:veams-query'
+	'veams-query'
 ];
 
 var internalLibs = [
