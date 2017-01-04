@@ -1,3 +1,14 @@
+### v4.0.1
+- Update path for veams-query (use npm package)
+
+### v4.0.0
+- Update all external libraries
+- Add Veams-Query support
+- Improve event handling in app.js
+- Add lazyloading as default
+- Ajax handling with custom option delegation
+- Replace respimg.js with picturefill.js
+
 ### v3.6.1
 - add hashchange event
 

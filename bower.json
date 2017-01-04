@@ -1,6 +1,6 @@
 {
 	"name": "veams-js",
-	"version": "4.0.0",
+	"version": "4.0.1",
 	"ignore": [
 		"demo",
 		".gitignore",
@@ -9,7 +9,11 @@
 	"authors": [
 		{
 			"name": "Sebastian Fitzner",
-			"email": "sebastian@jci-werbeagentur.com"
+			"email": "sebastian@veams.org"
+		},
+		{
+			"name": "Andy Gutsche",
+			"email": "andy@veams.org"
 		}
 	],
 	"repository": {
